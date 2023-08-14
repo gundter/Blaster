@@ -6,6 +6,7 @@
 #include "Character/BlasterCharacter.h"
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Net/UnrealNetwork.h"
 
 AWeapon::AWeapon()
 {
@@ -26,6 +27,13 @@ AWeapon::AWeapon()
 	PickupWidget = CreateDefaultSubobject<UWidgetComponent>("Pickup Widget");
 	PickupWidget->SetupAttachment(GetRootComponent());
 	PickupWidget->SetVisibility(false);
+}
+
+void AWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AWeapon, WeaponState);
 }
 
 void AWeapon::BeginPlay()
@@ -74,3 +82,30 @@ void AWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	}
 }
 
+void AWeapon::OnRep_WeaponState() const
+{
+	switch (WeaponState)
+	{
+	case EWeaponState::EWS_Equipped:
+		ShowPickupWidget(false);
+		Sphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		break;
+	default:
+		break;
+	}
+}
+
+void AWeapon::SetWeaponState(const EWeaponState State)
+{
+	WeaponState = State;
+
+	switch (WeaponState)
+	{
+	case EWeaponState::EWS_Equipped:
+		ShowPickupWidget(false);
+		Sphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		break;
+	default:
+		break;
+	}
+}
