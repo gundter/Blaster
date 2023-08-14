@@ -6,6 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
+#include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
@@ -33,6 +34,9 @@ ABlasterCharacter::ABlasterCharacter()
 
 	CharacterMesh = CreateDefaultSubobject<USkeletalMeshComponent>("Character Mesh");
 	CharacterMesh->SetupAttachment(GetMesh());
+
+	OverheadWidget = CreateDefaultSubobject<UWidgetComponent>("Overhead Widget");
+	OverheadWidget->SetupAttachment(GetRootComponent());
 }
 
 void ABlasterCharacter::BeginPlay()
