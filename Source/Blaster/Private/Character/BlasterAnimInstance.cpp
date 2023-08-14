@@ -25,6 +25,7 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (BlasterCharacter == nullptr) return;
 
 	bWeaponEquipped = BlasterCharacter->IsWeaponEquipped();
+	bIsAiming = BlasterCharacter->IsAiming();
 }
 
 void UBlasterAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)

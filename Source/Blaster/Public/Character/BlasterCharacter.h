@@ -35,6 +35,8 @@ protected:
 	void Look(const FInputActionValue& Value);
 	void Equip();
 	void ToggleCrouch();
+	void AimButtonPressed();
+	void AimButtonReleased();
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	TObjectPtr<USpringArmComponent> CameraBoom;
@@ -63,6 +65,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> CrouchAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> AimAction;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UWidgetComponent> OverheadWidget;
 
@@ -81,4 +86,5 @@ public:
 	FORCEINLINE USkeletalMeshComponent* GetCharacterMesh() const { return CharacterMesh; }
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped() const;
+	bool IsAiming() const;
 };
