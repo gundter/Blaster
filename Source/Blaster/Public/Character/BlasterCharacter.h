@@ -28,6 +28,7 @@ public:
 	virtual void PostInitializeComponents() override;
 protected:
 	virtual void BeginPlay() override;
+	void AimOffset(float DeltaTime);
 	/**
 	 * Input Callbacks
 	 */
@@ -77,6 +78,10 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UCombatComponent> Combat;
 
+	float AO_Yaw;
+	float AO_Pitch;
+	FRotator StartingAimRotation;
+
 	UFUNCTION()
 	void OnRep_OverlappingWeapon(const AWeapon* LastWeapon) const;
 
@@ -84,6 +89,8 @@ private:
 	void ServerEquipButtonPressed();
 public:
 	FORCEINLINE USkeletalMeshComponent* GetCharacterMesh() const { return CharacterMesh; }
+	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }
+	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped() const;
 	bool IsAiming() const;
