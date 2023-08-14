@@ -94,4 +94,5 @@ public:
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped() const;
 	bool IsAiming() const;
+	AWeapon* GetEquippedWeapon() const;
 };
