@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Blaster/BlasterTypes/TurningInPlace.h"
 #include "GameFramework/Character.h"
 #include "BlasterCharacter.generated.h"
 
+enum class ETurningInPlace : uint8;
 class UCombatComponent;
 class AWeapon;
 class UWidgetComponent;
@@ -81,16 +83,20 @@ private:
 	float AO_Yaw;
 	float AO_Pitch;
 	FRotator StartingAimRotation;
+	ETurningInPlace TurningInPlace = ETurningInPlace::ETIP_NotTurning;
 
 	UFUNCTION()
 	void OnRep_OverlappingWeapon(const AWeapon* LastWeapon) const;
 
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();
+
+	void TurnInPlace(float DeltaTime);
 public:
 	FORCEINLINE USkeletalMeshComponent* GetCharacterMesh() const { return CharacterMesh; }
 	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
+	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace; }
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped() const;
 	bool IsAiming() const;

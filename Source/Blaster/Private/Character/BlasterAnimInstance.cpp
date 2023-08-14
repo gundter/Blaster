@@ -70,4 +70,5 @@ void UBlasterAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 	AO_Yaw = BlasterCharacter->GetAO_Yaw();
 	AO_Pitch = BlasterCharacter->GetAO_Pitch();
 	EquippedWeapon = BlasterCharacter->GetEquippedWeapon();
+	TurningInPlace = BlasterCharacter->GetTurningInPlace();
 }
