@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Serico Games
 
 
 #include "Menu.h"
@@ -7,11 +7,6 @@
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
 
-UMenu::UMenu(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
-{
-	bIsFocusable = true;
-}
-
 void UMenu::MenuSetup(int32 NumberOfPublicConnections, FString TypeOfMatch, FString LobbyPath)
 {
 	PathToLobby = FString::Printf(TEXT("%s?listen"), *LobbyPath);
@@ -19,6 +14,7 @@ void UMenu::MenuSetup(int32 NumberOfPublicConnections, FString TypeOfMatch, FStr
 	MatchType = TypeOfMatch;
 	AddToViewport();
 	SetVisibility(ESlateVisibility::Visible);
+	bIsFocusable = true;
 
 	UWorld* World = GetWorld();
 	if (World)
