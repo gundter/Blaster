@@ -19,6 +19,7 @@ public:
 	friend ABlasterCharacter;
 	UCombatComponent();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	void EquipWeapon(AWeapon* WeaponToEquip);
 protected:
@@ -27,6 +28,6 @@ private:
 	UPROPERTY()
 	TObjectPtr<ABlasterCharacter> Character;
 	
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	TObjectPtr<AWeapon> EquippedWeapon;
 };

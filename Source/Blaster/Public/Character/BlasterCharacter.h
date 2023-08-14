@@ -74,5 +74,7 @@ private:
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();
 public:
+	FORCEINLINE USkeletalMeshComponent* GetCharacterMesh() const { return CharacterMesh; }
 	void SetOverlappingWeapon(AWeapon* Weapon);
+	bool IsWeaponEquipped() const;
 };

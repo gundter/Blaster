@@ -22,12 +22,19 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	{
 		BlasterCharacter = Cast<ABlasterCharacter>(TryGetPawnOwner());
 	}
+	if (BlasterCharacter == nullptr) return;
+
+	bWeaponEquipped = BlasterCharacter->IsWeaponEquipped();
 }
 
 void UBlasterAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeThreadSafeUpdateAnimation(DeltaSeconds);
-	
+
+	if (BlasterCharacter == nullptr)
+	{
+		BlasterCharacter = Cast<ABlasterCharacter>(TryGetPawnOwner());
+	}
 	if (BlasterCharacter == nullptr) return;
 
 	Velocity = BlasterCharacter->GetVelocity();
