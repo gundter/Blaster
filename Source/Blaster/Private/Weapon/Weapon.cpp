@@ -3,7 +3,9 @@
 
 #include "Weapon/Weapon.h"
 
+#include "Character/BlasterCharacter.h"
 #include "Components/SphereComponent.h"
+#include "Components/WidgetComponent.h"
 
 AWeapon::AWeapon()
 {
@@ -20,6 +22,10 @@ AWeapon::AWeapon()
 	Sphere->SetupAttachment(GetRootComponent());
 	Sphere->SetCollisionResponseToAllChannels(ECR_Ignore);
 	Sphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	PickupWidget = CreateDefaultSubobject<UWidgetComponent>("Pickup Widget");
+	PickupWidget->SetupAttachment(GetRootComponent());
+	PickupWidget->SetVisibility(false);
 }
 
 void AWeapon::BeginPlay()
@@ -30,6 +36,9 @@ void AWeapon::BeginPlay()
 	{
 		Sphere->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		Sphere->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+
+		Sphere->OnComponentBeginOverlap.AddDynamic(this, &AWeapon::OnSphereOverlap);
+		Sphere->OnComponentEndOverlap.AddDynamic(this, &AWeapon::OnSphereEndOverlap);
 	}
 }
 
@@ -37,5 +46,31 @@ void AWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AWeapon::ShowPickupWidget(const bool bShowWidget) const
+{
+	if (PickupWidget)
+	{
+		PickupWidget->SetVisibility(bShowWidget);
+	}
+}
+
+void AWeapon::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+                              UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bSweep, const FHitResult& SweepResult)
+{
+	if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(OtherActor))
+	{
+		BlasterCharacter->SetOverlappingWeapon(this);
+	}
+}
+
+void AWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(OtherActor))
+	{
+		BlasterCharacter->SetOverlappingWeapon(nullptr);
+	}
 }
 
