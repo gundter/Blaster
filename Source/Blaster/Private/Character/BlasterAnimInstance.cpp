@@ -41,4 +41,5 @@ void UBlasterAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 	GroundSpeed = UKismetMathLibrary::VSizeXY(Velocity);
 	bIsFalling = BlasterCharacter->GetCharacterMovement()->IsFalling();
 	bIsAccelerating = GroundSpeed > 3.f && BlasterCharacter->GetCharacterMovement()->GetCurrentAcceleration() != FVector::ZeroVector;
+	bIsCrouched = BlasterCharacter->bIsCrouched;
 }
