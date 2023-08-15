@@ -74,6 +74,18 @@ void ABlasterCharacter::PostInitializeComponents()
 	}
 }
 
+void ABlasterCharacter::PlayFireMontage(bool bAiming)
+{
+	if (Combat == nullptr || Combat->EquippedWeapon == nullptr) return;
+
+	if (UAnimInstance* AnimInstance = GetCharacterMesh()->GetAnimInstance(); AnimInstance && FireWeaponMontage && AimFireWeaponMontage)
+	{
+		UAnimMontage* FireMontage = bAiming ? AimFireWeaponMontage : FireWeaponMontage;
+		AnimInstance->Montage_Play(FireMontage);
+		AnimInstance->Montage_JumpToSection("FireLoop");
+	}
+}
+
 void ABlasterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -178,6 +190,8 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &ABlasterCharacter::ToggleCrouch);
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &ABlasterCharacter::AimButtonPressed);
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &ABlasterCharacter::AimButtonReleased);
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &ABlasterCharacter::FireButtonPressed);
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &ABlasterCharacter::FireButtonReleased);
 	}
 }
 
@@ -257,6 +271,22 @@ void ABlasterCharacter::AimButtonReleased()
 	if (Combat)
 	{
 		Combat->SetAiming(false);
+	}
+}
+
+void ABlasterCharacter::FireButtonPressed()
+{
+	if (Combat)
+	{
+		Combat->FireButtonPressed(true);
+	}
+}
+
+void ABlasterCharacter::FireButtonReleased()
+{
+	if (Combat)
+	{
+		Combat->FireButtonPressed(false);
 	}
 }
 

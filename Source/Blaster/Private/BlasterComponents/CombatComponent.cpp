@@ -34,6 +34,15 @@ void UCombatComponent::OnRep_EquippedWeapon()
 	}
 }
 
+void UCombatComponent::FireButtonPressed(const bool bPressed)
+{
+	bFireButtonPressed = bPressed;
+	if (Character && bFireButtonPressed)
+	{
+		Character->PlayFireMontage(bAiming);
+	}
+}
+
 void UCombatComponent::SetAiming(const bool bIsAiming)
 {
 	bAiming = bIsAiming;

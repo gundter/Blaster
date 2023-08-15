@@ -28,6 +28,8 @@ public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void PostInitializeComponents() override;
+
+	void PlayFireMontage(bool bAiming);
 protected:
 	virtual void BeginPlay() override;
 	virtual void Jump() override;
@@ -41,6 +43,8 @@ protected:
 	void ToggleCrouch();
 	void AimButtonPressed();
 	void AimButtonReleased();
+	void FireButtonPressed();
+	void FireButtonReleased();
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	TObjectPtr<USpringArmComponent> CameraBoom;
@@ -72,6 +76,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> AimAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> ShootAction;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UWidgetComponent> OverheadWidget;
 
@@ -80,6 +87,12 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UCombatComponent> Combat;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TObjectPtr<UAnimMontage> FireWeaponMontage;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TObjectPtr<UAnimMontage> AimFireWeaponMontage;
 
 	float AO_Yaw;
 	float InterpAO_Yaw;
