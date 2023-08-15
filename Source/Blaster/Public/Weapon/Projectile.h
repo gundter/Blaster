@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Projectile.generated.h"
 
+class UProjectileMovementComponent;
 class UBoxComponent;
 
 UCLASS()
@@ -21,4 +22,7 @@ protected:
 private:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UBoxComponent> CollisionBox;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
 };
