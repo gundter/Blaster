@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "HUD/BlasterHUD.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "PlayerController/BlasterPlayerController.h"
 #include "Weapon/Weapon.h"
@@ -70,6 +71,23 @@ void UCombatComponent::SetHUDCrosshair(float DeltaTime)
 				Package.CrosshairRight = nullptr;
 				Package.CrosshairTop = nullptr;
 			}
+			// Calculate Crosshair Spread
+			// [0, 600] -> [0, 1]
+			const FVector2D WalkSpeedRange(0.f, Character->GetCharacterMovement()->MaxWalkSpeed);
+			const FVector2D VelocityMultiplayerRange(0.f, 1.f);
+			const float Speed = UKismetMathLibrary::VSizeXY(Character->GetVelocity());
+			CrosshairVelocityFactor = FMath::GetMappedRangeValueClamped(WalkSpeedRange, VelocityMultiplayerRange, Speed);
+			if (Character->GetCharacterMovement()->IsFalling())
+			{
+				CrosshairInAirFactor = FMath::FInterpTo(CrosshairInAirFactor, 2.25f, DeltaTime, 2.25f);
+			}
+			else
+			{
+				CrosshairInAirFactor = FMath::FInterpTo(CrosshairInAirFactor, 0.f, DeltaTime, 30.f);
+			}
+
+			Package.CrosshairSpread = CrosshairVelocityFactor + CrosshairInAirFactor;
+			
 			HUD->SetHUDPackage(Package);
 		}
 	}
