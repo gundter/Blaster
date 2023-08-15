@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blaster/BlasterTypes/TurningInPlace.h"
 #include "GameFramework/Character.h"
+#include "Interfaces/InteractWithCrosshairInterface.h"
 #include "BlasterCharacter.generated.h"
 
 enum class ETurningInPlace : uint8;
@@ -18,7 +19,7 @@ class UCameraComponent;
 class USpringArmComponent;
 
 UCLASS()
-class BLASTER_API ABlasterCharacter : public ACharacter
+class BLASTER_API ABlasterCharacter : public ACharacter, public IInteractWithCrosshairInterface
 {
 	GENERATED_BODY()
 

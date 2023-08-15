@@ -41,6 +41,7 @@ ABlasterCharacter::ABlasterCharacter()
 	CharacterMesh = CreateDefaultSubobject<USkeletalMeshComponent>("Character Mesh");
 	CharacterMesh->SetupAttachment(GetMesh());
 	CharacterMesh->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	CharacterMesh->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 
 	OverheadWidget = CreateDefaultSubobject<UWidgetComponent>("Overhead Widget");
 	OverheadWidget->SetupAttachment(GetRootComponent());
@@ -52,6 +53,7 @@ ABlasterCharacter::ABlasterCharacter()
 
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 
 	NetUpdateFrequency = 66.f;
 	MinNetUpdateFrequency = 33.f;

@@ -7,7 +7,6 @@
 #include "Character/BlasterCharacter.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "HUD/BlasterHUD.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Net/UnrealNetwork.h"
@@ -50,6 +49,8 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	
 	if (Character && Character->IsLocallyControlled())
 	{
+		FHitResult HitResult;
+		TraceUnderCrosshair(HitResult);
 		SetHUDCrosshair(DeltaTime);
 		InterpFOV(DeltaTime);
 	}
@@ -65,22 +66,21 @@ void UCombatComponent::SetHUDCrosshair(float DeltaTime)
 		HUD = HUD == nullptr ? Cast<ABlasterHUD>(Controller->GetHUD()) : HUD;
 		if (HUD)
 		{
-			FHUDPackage Package;
 			if (EquippedWeapon)
 			{
-				Package.CrosshairBottom = EquippedWeapon->CrosshairBottom;
-				Package.CrosshairCenter = EquippedWeapon->CrosshairCenter;
-				Package.CrosshairLeft = EquippedWeapon->CrosshairLeft;
-				Package.CrosshairRight = EquippedWeapon->CrosshairRight;
-				Package.CrosshairTop = EquippedWeapon->CrosshairTop;
+				HUDPackage.CrosshairBottom = EquippedWeapon->CrosshairBottom;
+				HUDPackage.CrosshairCenter = EquippedWeapon->CrosshairCenter;
+				HUDPackage.CrosshairLeft = EquippedWeapon->CrosshairLeft;
+				HUDPackage.CrosshairRight = EquippedWeapon->CrosshairRight;
+				HUDPackage.CrosshairTop = EquippedWeapon->CrosshairTop;
 			}
 			else
 			{
-				Package.CrosshairBottom = nullptr;
-				Package.CrosshairCenter = nullptr;
-				Package.CrosshairLeft = nullptr;
-				Package.CrosshairRight = nullptr;
-				Package.CrosshairTop = nullptr;
+				HUDPackage.CrosshairBottom = nullptr;
+				HUDPackage.CrosshairCenter = nullptr;
+				HUDPackage.CrosshairLeft = nullptr;
+				HUDPackage.CrosshairRight = nullptr;
+				HUDPackage.CrosshairTop = nullptr;
 			}
 			// Calculate Crosshair Spread
 			// [0, 600] -> [0, 1]
@@ -108,14 +108,14 @@ void UCombatComponent::SetHUDCrosshair(float DeltaTime)
 
 			CrosshairShootingFactor = FMath::FInterpTo(CrosshairShootingFactor, 0.f, DeltaTime, 20.f);
 
-			Package.CrosshairSpread =
+			HUDPackage.CrosshairSpread =
 				0.5f +
 					CrosshairVelocityFactor +
 						CrosshairInAirFactor -
 							CrosshairAimFactor +
 								CrosshairShootingFactor;
 			
-			HUD->SetHUDPackage(Package);
+			HUD->SetHUDPackage(HUDPackage);
 		}
 	}
 }
@@ -168,6 +168,16 @@ void UCombatComponent::TraceUnderCrosshair(FHitResult& TraceHitResult)
 		const FVector Start = CrosshairWorldPosition;
 		const FVector End = Start + CrosshairWorldDirection * TRACE_LENGTH;
 		GetWorld()->LineTraceSingleByChannel(TraceHitResult, Start, End, ECC_Visibility);
+		
+		if (TraceHitResult.GetActor() && TraceHitResult.GetActor()->Implements<UInteractWithCrosshairInterface>())
+		{
+			HUDPackage.CrosshairColor = FLinearColor::Red;
+		}
+		else
+		{
+			HUDPackage.CrosshairColor = FLinearColor::White;
+		}
+		
 		if (!TraceHitResult.bBlockingHit)
 		{
 			TraceHitResult.ImpactPoint = End;
