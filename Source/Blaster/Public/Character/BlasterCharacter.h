@@ -30,6 +30,7 @@ public:
 	virtual void PostInitializeComponents() override;
 protected:
 	virtual void BeginPlay() override;
+	virtual void Jump() override;
 	void AimOffset(float DeltaTime);
 	/**
 	 * Input Callbacks

@@ -27,7 +27,7 @@ protected:
 	void SetAiming(bool bIsAiming);
 
 	UFUNCTION(Server, Reliable)
-	void ServerSetAiming(bool bIsAiming);
+	void ServerSetAiming(const bool bIsAiming);
 
 	UFUNCTION()
 	void OnRep_EquippedWeapon();
@@ -40,4 +40,10 @@ private:
 
 	UPROPERTY(Replicated)
 	bool bAiming;
+
+	UPROPERTY(EditAnywhere)
+	float BaseWalkSpeed = 600.f;
+	
+	UPROPERTY(EditAnywhere)
+	float AimWalkSpeed = 300.f;
 };
