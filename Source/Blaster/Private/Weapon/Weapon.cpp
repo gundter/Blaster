@@ -56,6 +56,14 @@ void AWeapon::Tick(float DeltaTime)
 
 }
 
+void AWeapon::Fire()
+{
+	if (FireAnimation)
+	{
+		WeaponMesh->PlayAnimation(FireAnimation, false);
+	}
+}
+
 void AWeapon::ShowPickupWidget(const bool bShowWidget) const
 {
 	if (PickupWidget)
