@@ -284,10 +284,6 @@ void ABlasterCharacter::FireButtonPressed()
 
 void ABlasterCharacter::FireButtonReleased()
 {
-	if (Combat)
-	{
-		Combat->FireButtonPressed(false);
-	}
 }
 
 void ABlasterCharacter::SetOverlappingWeapon(AWeapon* Weapon)
