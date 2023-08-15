@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "Weapon.generated.h"
 
+class ACasing;
 class UWidgetComponent;
 class USphereComponent;
 
@@ -54,6 +55,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_WeaponState, Category = "Weapon Properties")
 	EWeaponState WeaponState;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ACasing> CasingClass;
 
 	UFUNCTION()
 	void OnRep_WeaponState() const;
