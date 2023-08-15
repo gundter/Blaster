@@ -69,6 +69,10 @@ void UCombatComponent::TraceUnderCrosshair(FHitResult& TraceHitResult)
 		const FVector Start = CrosshairWorldPosition;
 		const FVector End = Start + CrosshairWorldDirection * TRACE_LENGTH;
 		GetWorld()->LineTraceSingleByChannel(TraceHitResult, Start, End, ECC_Visibility);
+		if (!TraceHitResult.bBlockingHit)
+		{
+			TraceHitResult.ImpactPoint = End;
+		}
 	}
 }
 
