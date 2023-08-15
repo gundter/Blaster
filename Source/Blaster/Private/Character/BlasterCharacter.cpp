@@ -24,7 +24,7 @@ ABlasterCharacter::ABlasterCharacter()
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
-	GetCharacterMovement()->bOrientRotationToMovement = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 850.f, 0.);
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 
