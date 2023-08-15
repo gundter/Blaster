@@ -6,8 +6,10 @@
 #include "Character/BlasterCharacter.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "HUD/BlasterHUD.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
+#include "PlayerController/BlasterPlayerController.h"
 #include "Weapon/Weapon.h"
 
 UCombatComponent::UCombatComponent()
@@ -37,6 +39,40 @@ void UCombatComponent::BeginPlay()
 void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	SetHUDCrosshair(DeltaTime);
+}
+
+void UCombatComponent::SetHUDCrosshair(float DeltaTime)
+{
+	if (Character == nullptr || Character->Controller == nullptr) return;
+
+	Controller = Controller == nullptr ? Cast<ABlasterPlayerController>(Character->Controller) : Controller;
+	if (Controller)
+	{
+		HUD = HUD == nullptr ? Cast<ABlasterHUD>(Controller->GetHUD()) : HUD;
+		if (HUD)
+		{
+			FHUDPackage Package;
+			if (EquippedWeapon)
+			{
+				Package.CrosshairBottom = EquippedWeapon->CrosshairBottom;
+				Package.CrosshairCenter = EquippedWeapon->CrosshairCenter;
+				Package.CrosshairLeft = EquippedWeapon->CrosshairLeft;
+				Package.CrosshairRight = EquippedWeapon->CrosshairRight;
+				Package.CrosshairTop = EquippedWeapon->CrosshairTop;
+			}
+			else
+			{
+				Package.CrosshairBottom = nullptr;
+				Package.CrosshairCenter = nullptr;
+				Package.CrosshairLeft = nullptr;
+				Package.CrosshairRight = nullptr;
+				Package.CrosshairTop = nullptr;
+			}
+			HUD->SetHUDPackage(Package);
+		}
+	}
 }
 
 void UCombatComponent::OnRep_EquippedWeapon()

@@ -33,6 +33,23 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	virtual void Fire(const FVector& HitTarget);
+	/*
+	 * Textures for the weapon crosshair
+	 */
+	UPROPERTY(EditAnywhere, Category = "Crosshair")
+	TObjectPtr<UTexture2D> CrosshairCenter;
+	
+	UPROPERTY(EditAnywhere, Category = "Crosshair")
+	TObjectPtr<UTexture2D> CrosshairRight;
+	
+	UPROPERTY(EditAnywhere, Category = "Crosshair")
+	TObjectPtr<UTexture2D> CrosshairLeft;
+
+	UPROPERTY(EditAnywhere, Category = "Crosshair")
+	TObjectPtr<UTexture2D> CrosshairTop;
+
+	UPROPERTY(EditAnywhere, Category = "Crosshair")
+	TObjectPtr<UTexture2D> CrosshairBottom;
 protected:
 	virtual void BeginPlay() override;
 
