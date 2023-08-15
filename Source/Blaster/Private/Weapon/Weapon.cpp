@@ -56,7 +56,7 @@ void AWeapon::Tick(float DeltaTime)
 
 }
 
-void AWeapon::Fire()
+void AWeapon::Fire(const FVector& HitTarget)
 {
 	if (FireAnimation)
 	{
