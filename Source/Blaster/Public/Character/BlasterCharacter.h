@@ -53,9 +53,6 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	TObjectPtr<UCameraComponent> FollowCamera;
 
-	UPROPERTY(VisibleAnywhere, Category = "Character")
-	TObjectPtr<USkeletalMeshComponent> CharacterMesh;
-
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputMappingContext> DefaultContext;
 
@@ -109,7 +106,6 @@ private:
 
 	void TurnInPlace(float DeltaTime);
 public:
-	FORCEINLINE USkeletalMeshComponent* GetCharacterMesh() const { return CharacterMesh; }
 	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
 	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace; }

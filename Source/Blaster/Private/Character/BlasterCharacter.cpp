@@ -28,6 +28,10 @@ ABlasterCharacter::ABlasterCharacter()
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 850.f, 0.);
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>("Camera Boom");
 	CameraBoom->SetupAttachment(GetMesh());
 	CameraBoom->TargetArmLength = 350.f;
@@ -38,11 +42,6 @@ ABlasterCharacter::ABlasterCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
-	CharacterMesh = CreateDefaultSubobject<USkeletalMeshComponent>("Character Mesh");
-	CharacterMesh->SetupAttachment(GetMesh());
-	CharacterMesh->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
-	CharacterMesh->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
-
 	OverheadWidget = CreateDefaultSubobject<UWidgetComponent>("Overhead Widget");
 	OverheadWidget->SetupAttachment(GetRootComponent());
 	OverheadWidget->SetVisibility(false);
@@ -50,10 +49,6 @@ ABlasterCharacter::ABlasterCharacter()
 	Combat = CreateDefaultSubobject<UCombatComponent>("Combat Component");
 	Combat->SetIsReplicated(true);
 	AddOwnedComponent(Combat);
-
-	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
-	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
-	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 
 	NetUpdateFrequency = 66.f;
 	MinNetUpdateFrequency = 33.f;
@@ -80,7 +75,7 @@ void ABlasterCharacter::PlayFireMontage(bool bAiming)
 {
 	if (Combat == nullptr || Combat->EquippedWeapon == nullptr) return;
 
-	if (UAnimInstance* AnimInstance = GetCharacterMesh()->GetAnimInstance(); AnimInstance && FireWeaponMontage && AimFireWeaponMontage)
+	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance(); AnimInstance && FireWeaponMontage && AimFireWeaponMontage)
 	{
 		UAnimMontage* FireMontage = bAiming ? AimFireWeaponMontage : FireWeaponMontage;
 		AnimInstance->Montage_Play(FireMontage);

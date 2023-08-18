@@ -16,7 +16,8 @@ void AProjectileWeapon::Fire(const FVector& HitTarget)
 	if (const USkeletalMeshSocket* MuzzleFlashSocket = GetWeaponMesh()->GetSocketByName("MuzzleFlash"))
 	{
 		const FTransform SocketTransform = MuzzleFlashSocket->GetSocketTransform(GetWeaponMesh());
-		// From MuzzleFlash Socket to hit location from TraceUnderCrosshairs
+		
+		// From MuzzleFlash Socket to hit location from TraceUnderCrosshair
 		const FVector ToTarget = HitTarget - SocketTransform.GetLocation();
 		const FRotator TargetRotation = ToTarget.Rotation();
 		if (ProjectileClass && InstigatorPawn)
