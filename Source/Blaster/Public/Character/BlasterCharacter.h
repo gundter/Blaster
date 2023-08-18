@@ -126,6 +126,18 @@ private:
 	void TurnInPlace(float DeltaTime);
 	void HideCharacterIfCameraClose();
 	float CalculateSpeed();
+
+	/*
+	 * Player Health
+	 */
+	UPROPERTY(EditAnywhere, Category = "Player Stats")
+	float MaxHealth = 100.f;
+	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_Health, Category = "Player Stats")
+	float Health = 100.f;
+	
+	UFUNCTION()
+	void OnRep_Health();
+	
 public:
 	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
