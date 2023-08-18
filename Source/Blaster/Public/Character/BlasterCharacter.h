@@ -29,6 +29,7 @@ public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void PostInitializeComponents() override;
+	virtual void OnRep_ReplicatedMovement() override;
 
 	void PlayFireMontage(bool bAiming);
 
@@ -37,7 +38,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void Jump() override;
+	void CalculateAO_Pitch();
 	void AimOffset(float DeltaTime);
+	void SimProxiesTurn();
 	void PlayHitReactMontage();
 	/**
 	 * Input Callbacks
@@ -107,6 +110,12 @@ private:
 	float AO_Pitch;
 	FRotator StartingAimRotation;
 	ETurningInPlace TurningInPlace = ETurningInPlace::ETIP_NotTurning;
+	bool bRotateRootBone;
+	float TurnThreshold = 0.5f;
+	float ProxyYaw;
+	FRotator ProxyRotationLastFrame;
+	FRotator ProxyRotation;
+	float TimeSinceLastMovementReplication;
 
 	UFUNCTION()
 	void OnRep_OverlappingWeapon(const AWeapon* LastWeapon) const;
@@ -116,11 +125,13 @@ private:
 
 	void TurnInPlace(float DeltaTime);
 	void HideCharacterIfCameraClose();
+	float CalculateSpeed();
 public:
 	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
 	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace; }
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	FORCEINLINE bool ShouldRotateRootBone() const { return bRotateRootBone; }
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped() const;
 	bool IsAiming() const;

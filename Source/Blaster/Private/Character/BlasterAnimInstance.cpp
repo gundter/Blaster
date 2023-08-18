@@ -71,4 +71,5 @@ void UBlasterAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 	AO_Pitch = BlasterCharacter->GetAO_Pitch();
 	EquippedWeapon = BlasterCharacter->GetEquippedWeapon();
 	TurningInPlace = BlasterCharacter->GetTurningInPlace();
+	bRotateRootBone = BlasterCharacter->ShouldRotateRootBone();
 }

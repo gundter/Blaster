@@ -50,6 +50,7 @@ private:
 	FRotator CharacterRotation;
 	FRotator DeltaRotation;
 	
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = "true"))
 	bool bWeaponEquipped;
 
@@ -70,4 +71,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
 	ETurningInPlace TurningInPlace;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+	bool bRotateRootBone;
 };
