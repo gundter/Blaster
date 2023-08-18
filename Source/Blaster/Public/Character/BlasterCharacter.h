@@ -31,10 +31,14 @@ public:
 	virtual void PostInitializeComponents() override;
 
 	void PlayFireMontage(bool bAiming);
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void MulticastHit();
 protected:
 	virtual void BeginPlay() override;
 	virtual void Jump() override;
 	void AimOffset(float DeltaTime);
+	void PlayHitReactMontage();
 	/**
 	 * Input Callbacks
 	 */
@@ -88,6 +92,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<UAnimMontage> FireWeaponMontage;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TObjectPtr<UAnimMontage> HitReactMontage;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<UAnimMontage> AimFireWeaponMontage;
