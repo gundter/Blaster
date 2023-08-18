@@ -92,6 +92,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<UAnimMontage> AimFireWeaponMontage;
 
+	UPROPERTY(EditAnywhere)
+	float CameraThreshold = 200.f;
+
 	float AO_Yaw;
 	float InterpAO_Yaw;
 	float AO_Pitch;
@@ -105,6 +108,7 @@ private:
 	void ServerEquipButtonPressed();
 
 	void TurnInPlace(float DeltaTime);
+	void HideCharacterIfCameraClose();
 public:
 	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
