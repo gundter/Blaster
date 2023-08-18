@@ -36,7 +36,7 @@ protected:
 	void ServerSetAiming(const bool bIsAiming);
 
 	UFUNCTION()
-	void OnRep_EquippedWeapon();
+	void OnRep_EquippedWeapon() const;
 
 	UFUNCTION(Server, Reliable)
 	void ServerFire(const FVector_NetQuantize& TraceHitTarget);
@@ -45,6 +45,7 @@ protected:
 	void MulticastFire(const FVector_NetQuantize& TraceHitTarget);
 
 	void TraceUnderCrosshair(FHitResult& TraceHitResult);
+	void Fire();
 	void SetHUDCrosshair(float DeltaTime);
 private:
 	UPROPERTY()
@@ -94,4 +95,13 @@ private:
 	float ZoomInterpSpeed = 20.f;
 
 	void InterpFOV(float DeltaTime);
+
+	/*
+	 * Automatic Fire
+	 */
+	FTimerHandle FireTimer;
+	bool bCanFire = true;
+	
+	void StartFireTimer();
+	void FireTimerFinished();
 };

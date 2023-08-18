@@ -129,7 +129,7 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &ABlasterCharacter::AimButtonPressed);
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &ABlasterCharacter::AimButtonReleased);
 		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &ABlasterCharacter::FireButtonPressed);
-		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &ABlasterCharacter::FireButtonReleased);
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Completed, this, &ABlasterCharacter::FireButtonReleased);
 	}
 }
 
@@ -357,7 +357,7 @@ void ABlasterCharacter::AimButtonReleased()
 
 void ABlasterCharacter::FireButtonPressed()
 {
-	if (Combat)
+	if (Combat && Combat->EquippedWeapon)
 	{
 		Combat->FireButtonPressed(true);
 	}
@@ -365,6 +365,10 @@ void ABlasterCharacter::FireButtonPressed()
 
 void ABlasterCharacter::FireButtonReleased()
 {
+	if (Combat && Combat->EquippedWeapon)
+	{
+		Combat->FireButtonPressed(false);
+	}
 }
 
 void ABlasterCharacter::SetOverlappingWeapon(AWeapon* Weapon)
