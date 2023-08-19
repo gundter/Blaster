@@ -32,6 +32,9 @@ public:
 	virtual void PostInitializeComponents() override;
 	virtual void OnRep_ReplicatedMovement() override;
 	void PlayFireMontage(bool bAiming) const;
+	void PlayElimMontage();
+
+	UFUNCTION(NetMulticast, Reliable)
 	void Elim();
 protected:
 	virtual void BeginPlay() override;
@@ -104,6 +107,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<UAnimMontage> AimFireWeaponMontage;
 
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TObjectPtr<UAnimMontage> ElimMontage;
+
 	UPROPERTY(EditAnywhere)
 	float CameraThreshold = 200.f;
 
@@ -142,12 +148,15 @@ private:
 
 	TObjectPtr<ABlasterPlayerController> BlasterPlayerController;
 	
+	bool bElimmed = false;
+	
 public:
 	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
 	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace; }
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 	FORCEINLINE bool ShouldRotateRootBone() const { return bRotateRootBone; }
+	FORCEINLINE bool IsElimmed() const { return bElimmed; }
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped() const;
 	bool IsAiming() const;

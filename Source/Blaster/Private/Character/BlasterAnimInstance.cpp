@@ -72,4 +72,5 @@ void UBlasterAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 	EquippedWeapon = BlasterCharacter->GetEquippedWeapon();
 	TurningInPlace = BlasterCharacter->GetTurningInPlace();
 	bRotateRootBone = BlasterCharacter->ShouldRotateRootBone();
+	bElimmed = BlasterCharacter->IsElimmed();
 }
