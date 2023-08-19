@@ -33,9 +33,6 @@ public:
 	virtual void OnRep_ReplicatedMovement() override;
 
 	void PlayFireMontage(bool bAiming) const;
-
-	UFUNCTION(NetMulticast, Unreliable)
-	void MulticastHit();
 protected:
 	virtual void BeginPlay() override;
 	virtual void Jump() override;
@@ -43,6 +40,10 @@ protected:
 	void AimOffset(float DeltaTime);
 	void SimProxiesTurn();
 	void PlayHitReactMontage() const;
+
+	UFUNCTION()
+	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser);
+	void UpdateHUDHealth();
 	/**
 	 * Input Callbacks
 	 */
