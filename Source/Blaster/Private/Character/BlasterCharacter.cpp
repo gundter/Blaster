@@ -13,6 +13,7 @@
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameMode/BlasterGameMode.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "PlayerController/BlasterPlayerController.h"
@@ -439,6 +440,11 @@ void ABlasterCharacter::PlayFireMontage(const bool bAiming) const
 	}
 }
 
+void ABlasterCharacter::Elim()
+{
+	
+}
+
 void ABlasterCharacter::PlayHitReactMontage() const
 {
 	if (Combat == nullptr || Combat->EquippedWeapon == nullptr) return;
@@ -456,7 +462,16 @@ void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const 
 {
 	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
 	UpdateHUDHealth();
-	PlayHitReactMontage();	
+	PlayHitReactMontage();
+	if (Health == 0.f)
+	{
+		if (ABlasterGameMode* BlasterGameMode = GetWorld()->GetAuthGameMode<ABlasterGameMode>())
+		{
+			BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(Controller) : BlasterPlayerController;
+			ABlasterPlayerController* AttackerController = Cast<ABlasterPlayerController>(InstigatorController);
+			BlasterGameMode->PlayerEliminated(this, BlasterPlayerController, AttackerController);
+		}
+	}
 }
 
 bool ABlasterCharacter::IsWeaponEquipped() const
