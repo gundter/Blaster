@@ -8,6 +8,7 @@
 #include "Interfaces/InteractWithCrosshairInterface.h"
 #include "BlasterCharacter.generated.h"
 
+class ABlasterPlayerController;
 enum class ETurningInPlace : uint8;
 class UCombatComponent;
 class AWeapon;
@@ -31,7 +32,7 @@ public:
 	virtual void PostInitializeComponents() override;
 	virtual void OnRep_ReplicatedMovement() override;
 
-	void PlayFireMontage(bool bAiming);
+	void PlayFireMontage(bool bAiming) const;
 
 	UFUNCTION(NetMulticast, Unreliable)
 	void MulticastHit();
@@ -41,7 +42,7 @@ protected:
 	void CalculateAO_Pitch();
 	void AimOffset(float DeltaTime);
 	void SimProxiesTurn();
-	void PlayHitReactMontage();
+	void PlayHitReactMontage() const;
 	/**
 	 * Input Callbacks
 	 */
@@ -124,8 +125,8 @@ private:
 	void ServerEquipButtonPressed();
 
 	void TurnInPlace(float DeltaTime);
-	void HideCharacterIfCameraClose();
-	float CalculateSpeed();
+	void HideCharacterIfCameraClose() const;
+	float CalculateSpeed() const;
 
 	/*
 	 * Player Health
@@ -137,6 +138,8 @@ private:
 	
 	UFUNCTION()
 	void OnRep_Health();
+
+	TObjectPtr<ABlasterPlayerController> BlasterPlayerController;
 	
 public:
 	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }
