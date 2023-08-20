@@ -34,8 +34,9 @@ public:
 	void PlayFireMontage(bool bAiming) const;
 	void PlayElimMontage();
 
+	void ElimPlayer();
 	UFUNCTION(NetMulticast, Reliable)
-	void Elim();
+	void MulticastElim();
 protected:
 	virtual void BeginPlay() override;
 	virtual void Jump() override;
@@ -145,10 +146,13 @@ private:
 	
 	UFUNCTION()
 	void OnRep_Health();
-
 	TObjectPtr<ABlasterPlayerController> BlasterPlayerController;
-	
 	bool bElimmed = false;
+	
+	UPROPERTY(EditDefaultsOnly)
+	float ElimDelay = 3.f;
+	FTimerHandle ElimTimer;
+	void ElimTimerFinished();
 	
 public:
 	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }
