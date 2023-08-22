@@ -31,6 +31,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void ShowPickupWidget(const bool bShowWidget) const;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	void Dropped();
 
 	virtual void Fire(const FVector& HitTarget);
 	/*
