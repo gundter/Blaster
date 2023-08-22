@@ -67,7 +67,7 @@ void UCombatComponent::FireButtonPressed(const bool bPressed)
 
 void UCombatComponent::Fire()
 {
-	if (bCanFire)
+	if (CanFire())
 	{
 		bCanFire = false;
 		FHitResult HitResult;
@@ -146,8 +146,6 @@ void UCombatComponent::OnRep_EquippedWeapon() const
 		{
 			HandSocket->AttachActor(EquippedWeapon, Character->GetMesh());
 		}
-		EquippedWeapon->SetOwner(Character);
-		EquippedWeapon->SetHUDAmmo();
 		Character->GetCharacterMovement()->bOrientRotationToMovement = false;
 		Character->bUseControllerRotationYaw = true;
 	}
@@ -299,4 +297,11 @@ void UCombatComponent::ServerSetAiming_Implementation(const bool bIsAiming)
 		Character->GetCharacterMovement()->MaxWalkSpeed = bIsAiming ? AimWalkSpeed : BaseWalkSpeed;
 		Character->GetCharacterMovement()->MaxWalkSpeedCrouched = bIsAiming ? AimWalkSpeedCrouched : BaseWalkSpeedCrouched;
 	}
+}
+
+bool UCombatComponent::CanFire() const
+{
+	if (EquippedWeapon == nullptr) return false;
+
+	return !EquippedWeapon->IsEmpty() || !bCanFire;
 }
