@@ -64,10 +64,16 @@ private:
 	bool bAiming;
 
 	UPROPERTY(EditAnywhere)
-	float BaseWalkSpeed = 600.f;
+	float BaseWalkSpeed = 480.f;
 	
 	UPROPERTY(EditAnywhere)
-	float AimWalkSpeed = 300.f;
+	float AimWalkSpeed = 120.f;
+
+	UPROPERTY(EditAnywhere)
+	float BaseWalkSpeedCrouched = 300.f;
+	
+	UPROPERTY(EditAnywhere)
+	float AimWalkSpeedCrouched = 120.f;
 
 	bool bFireButtonPressed;
 
