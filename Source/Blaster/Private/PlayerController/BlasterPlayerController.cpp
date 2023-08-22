@@ -59,6 +59,18 @@ void ABlasterPlayerController::SetHUDDefeats(const int32 Defeats)
 	}
 }
 
+
+
+void ABlasterPlayerController::SetHUDWeaponAmmo(int32 Ammo)
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+
+	if (IsWeaponAmmoHUDValid())
+	{
+		BlasterHUD->CharacterOverlay->WeaponAmmoAmount->SetText(FText::AsNumber(Ammo));
+	}
+}
+
 bool ABlasterPlayerController::IsHUDValid() const
 {
 	return BlasterHUD &&
@@ -79,4 +91,11 @@ bool ABlasterPlayerController::IsDefeatsHUDValid() const
 	return BlasterHUD &&
 		BlasterHUD->CharacterOverlay &&
 		BlasterHUD->CharacterOverlay->DefeatsAmount;
+}
+
+bool ABlasterPlayerController::IsWeaponAmmoHUDValid() const
+{
+	return BlasterHUD &&
+		BlasterHUD->CharacterOverlay &&
+		BlasterHUD->CharacterOverlay->WeaponAmmoAmount;
 }

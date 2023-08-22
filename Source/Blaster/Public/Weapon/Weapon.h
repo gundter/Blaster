@@ -7,6 +7,8 @@
 #include "GameFramework/Actor.h"
 #include "Weapon.generated.h"
 
+class ABlasterPlayerController;
+class ABlasterCharacter;
 class ACasing;
 class UWidgetComponent;
 class USphereComponent;
@@ -31,6 +33,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void ShowPickupWidget(const bool bShowWidget) const;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void OnRep_Owner() override;
+	void SetHUDAmmo();
 	void Dropped();
 
 	virtual void Fire(const FVector& HitTarget);
@@ -95,8 +99,26 @@ private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ACasing> CasingClass;
 
+	UPROPERTY(EditAnywhere, ReplicatedUsing = OnRep_Ammo, Category = "Weapon Properties")
+	int32 Ammo;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+	int32 MagCapacity;
+
+	UPROPERTY()
+	TObjectPtr<ABlasterCharacter> BlasterOwnerCharacter;
+
+	UPROPERTY()
+	TObjectPtr<ABlasterPlayerController> BlasterOwnerController;
+
 	UFUNCTION()
 	void OnRep_WeaponState() const;
+
+	UFUNCTION()
+	void OnRep_Ammo();
+
+	void SpendRound();
+
 public:
 	void SetWeaponState(const EWeaponState State);
 	FORCEINLINE USphereComponent* GetSphere() const { return Sphere; }

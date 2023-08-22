@@ -8,6 +8,7 @@
 #include "Components/WidgetComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "Net/UnrealNetwork.h"
+#include "PlayerController/BlasterPlayerController.h"
 #include "Weapon/Casing.h"
 
 AWeapon::AWeapon()
@@ -36,14 +37,7 @@ void AWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeP
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AWeapon, WeaponState);
-}
-
-void AWeapon::Dropped()
-{
-	SetWeaponState(EWeaponState::EWS_Dropped);
-	const FDetachmentTransformRules DetachRules(EDetachmentRule::KeepWorld, true);
-	WeaponMesh->DetachFromComponent(DetachRules);
-	SetOwner(nullptr);
+	DOREPLIFETIME(AWeapon, Ammo);
 }
 
 void AWeapon::BeginPlay()
@@ -81,6 +75,45 @@ void AWeapon::Fire(const FVector& HitTarget)
 			{
 				World->SpawnActor<ACasing>(CasingClass, SocketTransform.GetLocation(), SocketTransform.GetRotation().Rotator());
 			}
+		}
+	}
+	SpendRound();
+}
+
+void AWeapon::SpendRound()
+{
+	--Ammo;
+	SetHUDAmmo();
+}
+
+void AWeapon::OnRep_Ammo()
+{
+	SetHUDAmmo();
+}
+
+void AWeapon::OnRep_Owner()
+{
+	Super::OnRep_Owner();
+	if (Owner == nullptr)
+	{
+		BlasterOwnerCharacter = nullptr;
+		BlasterOwnerController = nullptr;
+	}
+	else
+	{
+		SetHUDAmmo();
+	}
+}
+
+void AWeapon::SetHUDAmmo()
+{
+	BlasterOwnerCharacter = BlasterOwnerCharacter == nullptr ? Cast<ABlasterCharacter>(GetOwner()) : BlasterOwnerCharacter;
+	if (BlasterOwnerCharacter)
+	{
+		BlasterOwnerController = BlasterOwnerController == nullptr ? Cast<ABlasterPlayerController>(BlasterOwnerCharacter->Controller) : BlasterOwnerController;
+		if (BlasterOwnerController)
+		{
+			BlasterOwnerController->SetHUDWeaponAmmo(Ammo);
 		}
 	}
 }
@@ -157,4 +190,14 @@ void AWeapon::SetWeaponState(const EWeaponState State)
 	default:
 		break;
 	}
+}
+
+void AWeapon::Dropped()
+{
+	SetWeaponState(EWeaponState::EWS_Dropped);
+	const FDetachmentTransformRules DetachRules(EDetachmentRule::KeepWorld, true);
+	WeaponMesh->DetachFromComponent(DetachRules);
+	SetOwner(nullptr);
+	BlasterOwnerCharacter = nullptr;
+	BlasterOwnerController = nullptr;
 }
