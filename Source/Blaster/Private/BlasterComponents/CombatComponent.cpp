@@ -169,6 +169,21 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	Character->bUseControllerRotationYaw = true;
 }
 
+void UCombatComponent::Reload()
+{
+	if (CarriedAmmo > 0)
+	{
+		ServerReload();
+	}
+}
+
+void UCombatComponent::ServerReload_Implementation()
+{
+	if (Character == nullptr) return;
+
+	Character->PlayReloadMontage();
+}
+
 void UCombatComponent::OnRep_EquippedWeapon() const
 {
 	if (EquippedWeapon && Character)
@@ -228,7 +243,7 @@ void UCombatComponent::TraceUnderCrosshair(FHitResult& TraceHitResult)
 	}
 }
 
-void UCombatComponent::SetHUDCrosshair(float DeltaTime)
+void UCombatComponent::SetHUDCrosshair(const float DeltaTime)
 {
 	if (Character == nullptr || Character->Controller == nullptr) return;
 
@@ -292,7 +307,7 @@ void UCombatComponent::SetHUDCrosshair(float DeltaTime)
 	}
 }
 
-void UCombatComponent::InterpFOV(float DeltaTime)
+void UCombatComponent::InterpFOV(const float DeltaTime)
 {
 	if (EquippedWeapon == nullptr) return;
 

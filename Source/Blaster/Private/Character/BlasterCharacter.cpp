@@ -19,6 +19,7 @@
 #include "PlayerController/BlasterPlayerController.h"
 #include "PlayerState/BlasterPlayerState.h"
 #include "Weapon/Weapon.h"
+#include "Weapon/WeaponTypes.h"
 
 ABlasterCharacter::ABlasterCharacter()
 {
@@ -135,6 +136,7 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &ABlasterCharacter::AimButtonReleased);
 		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &ABlasterCharacter::FireButtonPressed);
 		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Completed, this, &ABlasterCharacter::FireButtonReleased);
+		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Started, this, &ABlasterCharacter::Reload);
 	}
 }
 
@@ -242,6 +244,14 @@ void ABlasterCharacter::FireButtonReleased()
 	if (Combat && Combat->EquippedWeapon)
 	{
 		Combat->FireButtonPressed(false);
+	}
+}
+
+void ABlasterCharacter::Reload()
+{
+	if (Combat)
+	{
+		Combat->Reload();
 	}
 }
 
@@ -439,6 +449,28 @@ void ABlasterCharacter::PlayFireMontage(const bool bAiming) const
 		UAnimMontage* FireMontage = bAiming ? AimFireWeaponMontage : FireWeaponMontage;
 		AnimInstance->Montage_Play(FireMontage);
 		AnimInstance->Montage_JumpToSection("FireLoop");
+	}
+}
+
+void ABlasterCharacter::PlayReloadMontage() const
+{
+	if (Combat == nullptr || Combat->EquippedWeapon == nullptr) return;
+
+	UAnimMontage* ReloadWeaponMontage;
+	switch (Combat->EquippedWeapon->GetWeaponType())
+	{
+	case EWeaponType::EWT_AssaultRifle:
+		ReloadWeaponMontage = ReloadRifleMontage;
+		break;
+	default:
+		ReloadWeaponMontage = nullptr;
+	}
+
+	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance(); AnimInstance && ReloadWeaponMontage)
+	{
+		AnimInstance->Montage_Play(ReloadWeaponMontage);
+		const FName SectionName = Combat->EquippedWeapon->IsEmpty() ? "ReloadEmpty" : "ReloadLoaded";
+		AnimInstance->Montage_JumpToSection(SectionName);
 	}
 }
 
