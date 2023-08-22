@@ -8,6 +8,7 @@
 #include "Interfaces/InteractWithCrosshairInterface.h"
 #include "BlasterCharacter.generated.h"
 
+class ABlasterPlayerState;
 class ABlasterPlayerController;
 enum class ETurningInPlace : uint8;
 class UCombatComponent;
@@ -44,6 +45,8 @@ protected:
 	void AimOffset(float DeltaTime);
 	void SimProxiesTurn();
 	void PlayHitReactMontage() const;
+	// Poll for any relevant classes and initialize our HUD
+	void PollInit();
 
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser);
@@ -114,6 +117,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	float CameraThreshold = 200.f;
 
+	TObjectPtr<ABlasterPlayerState> BlasterPlayerState;
 	float AO_Yaw;
 	float InterpAO_Yaw;
 	float AO_Pitch;

@@ -40,10 +40,28 @@ void ABlasterPlayerController::SetHUDHealth(const float Health, const float MaxH
 	}
 }
 
+void ABlasterPlayerController::SetHUDScore(float Score)
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+
+	if (IsScoreHUDValid())
+	{
+		const FString ScoreAmountText = FString::Printf(TEXT("%d"), FMath::FloorToInt(Score));
+		BlasterHUD->CharacterOverlay->ScoreAmount->SetText(FText::FromString(ScoreAmountText));
+	}
+}
+
 bool ABlasterPlayerController::IsHUDValid() const
 {
 	return BlasterHUD &&
 		BlasterHUD->CharacterOverlay &&
 			BlasterHUD->CharacterOverlay->HealthBar &&
 				BlasterHUD->CharacterOverlay->HealthText;
+}
+
+bool ABlasterPlayerController::IsScoreHUDValid() const
+{
+	return BlasterHUD &&
+		BlasterHUD->CharacterOverlay &&
+		BlasterHUD->CharacterOverlay->ScoreAmount;
 }
