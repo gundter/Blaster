@@ -24,7 +24,18 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		BlasterCharacter = Cast<ABlasterCharacter>(TryGetPawnOwner());
 	}
 	if (BlasterCharacter == nullptr) return;
-
+	
+	Velocity = BlasterCharacter->GetVelocity();
+	GroundSpeed = UKismetMathLibrary::VSizeXY(Velocity);
+	bIsFalling = BlasterCharacter->GetCharacterMovement()->IsFalling();
+	bIsAccelerating = GroundSpeed > 3.f && BlasterCharacter->GetCharacterMovement()->GetCurrentAcceleration() != FVector::ZeroVector;
+	bIsCrouched = BlasterCharacter->bIsCrouched;
+	AO_Yaw = BlasterCharacter->GetAO_Yaw();
+	AO_Pitch = BlasterCharacter->GetAO_Pitch();
+	EquippedWeapon = BlasterCharacter->GetEquippedWeapon();
+	TurningInPlace = BlasterCharacter->GetTurningInPlace();
+	bRotateRootBone = BlasterCharacter->ShouldRotateRootBone();
+	bElimmed = BlasterCharacter->IsElimmed();
 	bWeaponEquipped = BlasterCharacter->IsWeaponEquipped();
 	bIsAiming = BlasterCharacter->IsAiming();
 
@@ -50,27 +61,4 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		LeftHandTransform.SetLocation(OutPosition);
 		LeftHandTransform.SetRotation(FQuat(OutRotation));
 	}
-}
-
-void UBlasterAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
-{
-	Super::NativeThreadSafeUpdateAnimation(DeltaSeconds);
-
-	if (BlasterCharacter == nullptr)
-	{
-		BlasterCharacter = Cast<ABlasterCharacter>(TryGetPawnOwner());
-	}
-	if (BlasterCharacter == nullptr) return;
-
-	Velocity = BlasterCharacter->GetVelocity();
-	GroundSpeed = UKismetMathLibrary::VSizeXY(Velocity);
-	bIsFalling = BlasterCharacter->GetCharacterMovement()->IsFalling();
-	bIsAccelerating = GroundSpeed > 3.f && BlasterCharacter->GetCharacterMovement()->GetCurrentAcceleration() != FVector::ZeroVector;
-	bIsCrouched = BlasterCharacter->bIsCrouched;
-	AO_Yaw = BlasterCharacter->GetAO_Yaw();
-	AO_Pitch = BlasterCharacter->GetAO_Pitch();
-	EquippedWeapon = BlasterCharacter->GetEquippedWeapon();
-	TurningInPlace = BlasterCharacter->GetTurningInPlace();
-	bRotateRootBone = BlasterCharacter->ShouldRotateRootBone();
-	bElimmed = BlasterCharacter->IsElimmed();
 }

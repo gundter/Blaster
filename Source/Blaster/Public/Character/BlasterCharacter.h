@@ -120,7 +120,7 @@ private:
 	FRotator StartingAimRotation;
 	ETurningInPlace TurningInPlace = ETurningInPlace::ETIP_NotTurning;
 	bool bRotateRootBone;
-	float TurnThreshold = 0.5f;
+	float TurnThreshold = 15.f;
 	float ProxyYaw;
 	FRotator ProxyRotationLastFrame;
 	FRotator ProxyRotation;
@@ -161,8 +161,9 @@ public:
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 	FORCEINLINE bool ShouldRotateRootBone() const { return bRotateRootBone; }
 	FORCEINLINE bool IsElimmed() const { return bElimmed; }
-	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped() const;
 	bool IsAiming() const;
 	AWeapon* GetEquippedWeapon() const;
+	
+	void SetOverlappingWeapon(AWeapon* Weapon);
 };
