@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "Weapon.generated.h"
 
+enum class EWeaponType : uint8;
 class ABlasterPlayerController;
 class ABlasterCharacter;
 class ACasing;
@@ -111,6 +112,9 @@ private:
 	UPROPERTY()
 	TObjectPtr<ABlasterPlayerController> BlasterOwnerController;
 
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+	EWeaponType WeaponType;
+
 	UFUNCTION()
 	void OnRep_WeaponState() const;
 
@@ -125,5 +129,6 @@ public:
 	FORCEINLINE USkeletalMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
 	FORCEINLINE float GetZoomedFOV() const { return ZoomedFOV; }
 	FORCEINLINE float GetZoomInterpSpeed() const { return ZoomInterpSpeed; }
+	FORCEINLINE EWeaponType GetWeaponType() const { return WeaponType; }
 	bool IsEmpty() const;
 };
