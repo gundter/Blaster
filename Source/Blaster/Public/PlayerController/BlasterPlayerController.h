@@ -16,13 +16,16 @@ class BLASTER_API ABlasterPlayerController : public APlayerController
 	GENERATED_BODY()
 public:
 	void SetHUDHealth(float Health, float MaxHealth);
-	bool IsScoreHUDValid() const;
 	void SetHUDScore(float Score);
+	void SetHUDDefeats(int32 Defeats);
 	virtual void OnPossess(APawn* InPawn) override;
 protected:
 	virtual void BeginPlay() override;
-	bool IsHUDValid() const;
-
 private:
+	UPROPERTY()
 	TObjectPtr<ABlasterHUD> BlasterHUD;
+
+	bool IsHUDValid() const;
+	bool IsScoreHUDValid() const;
+	bool IsDefeatsHUDValid() const;
 };

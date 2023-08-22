@@ -117,7 +117,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	float CameraThreshold = 200.f;
 
+	UPROPERTY()
 	TObjectPtr<ABlasterPlayerState> BlasterPlayerState;
+	
 	float AO_Yaw;
 	float InterpAO_Yaw;
 	float AO_Pitch;
@@ -150,6 +152,8 @@ private:
 	
 	UFUNCTION()
 	void OnRep_Health();
+	
+	UPROPERTY()
 	TObjectPtr<ABlasterPlayerController> BlasterPlayerController;
 	bool bElimmed = false;
 	

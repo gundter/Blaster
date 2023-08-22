@@ -45,7 +45,8 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Player Stats")
 	TSubclassOf<UUserWidget> CharacterOverlayClass;
-	
+
+	UPROPERTY()
 	TObjectPtr<UCharacterOverlay> CharacterOverlay;
 protected:
 	virtual void BeginPlay() override;
