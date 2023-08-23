@@ -165,9 +165,33 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	{
 		Controller->SetHUDCarriedAmmo(CarriedAmmo);
 	}
+
+	if (EquippedWeapon->EquipSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, EquippedWeapon->EquipSound, Character->GetActorLocation());
+	}
 	
 	Character->GetCharacterMovement()->bOrientRotationToMovement = false;
 	Character->bUseControllerRotationYaw = true;
+}
+
+void UCombatComponent::OnRep_EquippedWeapon() const
+{
+	if (EquippedWeapon && Character)
+	{
+		EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
+		if (const USkeletalMeshSocket* HandSocket = Character->GetMesh()->GetSocketByName("RightHandSocket"))
+		{
+			HandSocket->AttachActor(EquippedWeapon, Character->GetMesh());
+		}
+		Character->GetCharacterMovement()->bOrientRotationToMovement = false;
+		Character->bUseControllerRotationYaw = true;
+
+		if (EquippedWeapon->EquipSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, EquippedWeapon->EquipSound, Character->GetActorLocation());
+		}
+	}
 }
 
 void UCombatComponent::Reload()
@@ -218,24 +242,6 @@ void UCombatComponent::ServerReload_Implementation()
 	HandleReload();
 }
 
-void UCombatComponent::OnRep_CombatState()
-{
-	switch (CombatState)
-	{
-	case ECombatState::ECS_Reloading:
-		HandleReload();
-		break;
-	case ECombatState::ECS_Unoccupied:
-		if (bFireButtonPressed)
-		{
-			Fire();
-		}
-		break;
-	default:
-		break;
-	}
-}
-
 void UCombatComponent::HandleReload() const
 {
 	Character->PlayReloadMontage();
@@ -256,17 +262,21 @@ int32 UCombatComponent::AmountToReload()
 	return 0;
 }
 
-void UCombatComponent::OnRep_EquippedWeapon() const
+void UCombatComponent::OnRep_CombatState()
 {
-	if (EquippedWeapon && Character)
+	switch (CombatState)
 	{
-		EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
-		if (const USkeletalMeshSocket* HandSocket = Character->GetMesh()->GetSocketByName("RightHandSocket"))
+	case ECombatState::ECS_Reloading:
+		HandleReload();
+		break;
+	case ECombatState::ECS_Unoccupied:
+		if (bFireButtonPressed)
 		{
-			HandSocket->AttachActor(EquippedWeapon, Character->GetMesh());
+			Fire();
 		}
-		Character->GetCharacterMovement()->bOrientRotationToMovement = false;
-		Character->bUseControllerRotationYaw = true;
+		break;
+	default:
+		break;
 	}
 }
 

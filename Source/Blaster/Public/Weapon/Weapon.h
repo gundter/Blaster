@@ -75,6 +75,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	bool bAutomatic = true;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<USoundBase> EquipSound;
 protected:
 	virtual void BeginPlay() override;
 
