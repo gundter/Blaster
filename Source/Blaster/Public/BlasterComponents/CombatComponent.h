@@ -52,7 +52,7 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void ServerReload();
 
-	void HandleReload();
+	void HandleReload() const;
 
 	void TraceUnderCrosshair(FHitResult& TraceHitResult);
 	void Fire();
