@@ -8,6 +8,7 @@
 #include "Interfaces/InteractWithCrosshairInterface.h"
 #include "BlasterCharacter.generated.h"
 
+enum class ECombatState : uint8;
 class ABlasterPlayerState;
 class ABlasterPlayerController;
 enum class ETurningInPlace : uint8;
@@ -104,7 +105,7 @@ private:
 	UPROPERTY(ReplicatedUsing = OnRep_OverlappingWeapon)
 	TObjectPtr<AWeapon> OverlappingWeapon;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCombatComponent> Combat;
 
 	/*
@@ -185,6 +186,7 @@ public:
 	bool IsWeaponEquipped() const;
 	bool IsAiming() const;
 	AWeapon* GetEquippedWeapon() const;
+	ECombatState GetCombatState() const;
 	
 	void SetOverlappingWeapon(AWeapon* Weapon);
 };

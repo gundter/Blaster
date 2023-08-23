@@ -589,3 +589,9 @@ AWeapon* ABlasterCharacter::GetEquippedWeapon() const
 
 	return Combat->EquippedWeapon;
 }
+
+ECombatState ABlasterCharacter::GetCombatState() const
+{
+	if (Combat == nullptr) return ECombatState::ECS_MAX;
+	return Combat->CombatState;
+}

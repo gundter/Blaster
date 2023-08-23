@@ -3,6 +3,7 @@
 
 #include "Character/BlasterAnimInstance.h"
 
+#include "Blaster/BlasterTypes/CombatState.h"
 #include "Character/BlasterCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -61,4 +62,6 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		LeftHandTransform.SetLocation(OutPosition);
 		LeftHandTransform.SetRotation(FQuat(OutRotation));
 	}
+
+	bUseFABRIK = BlasterCharacter->GetCombatState() != ECombatState::ECS_Reloading;
 }

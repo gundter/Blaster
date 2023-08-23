@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Blaster/BlasterTypes/CombatState.h"
 #include "Components/ActorComponent.h"
 #include "HUD/BlasterHUD.h"
 #include "CombatComponent.generated.h"
@@ -29,6 +30,8 @@ public:
 
 	void EquipWeapon(AWeapon* WeaponToEquip);
 	void Reload();
+	UFUNCTION(BlueprintCallable)
+	void FinishReloading();
 protected:
 	virtual void BeginPlay() override;
 	void SetAiming(bool bIsAiming);
@@ -48,6 +51,8 @@ protected:
 
 	UFUNCTION(Server, Reliable)
 	void ServerReload();
+
+	void HandleReload();
 
 	void TraceUnderCrosshair(FHitResult& TraceHitResult);
 	void Fire();
@@ -130,4 +135,10 @@ private:
 
 	UFUNCTION()
 	void OnRep_CarriedAmmo();
+
+	UPROPERTY(ReplicatedUsing = OnRep_CombatState)
+	ECombatState CombatState = ECombatState::ECS_Unoccupied;
+
+	UFUNCTION()
+	void OnRep_CombatState();
 };
