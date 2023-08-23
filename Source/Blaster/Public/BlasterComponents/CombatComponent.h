@@ -32,6 +32,7 @@ public:
 	void Reload();
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();
+
 protected:
 	virtual void BeginPlay() override;
 	void SetAiming(bool bIsAiming);
@@ -53,7 +54,7 @@ protected:
 	void ServerReload();
 
 	void HandleReload() const;
-
+	int32 AmountToReload();
 	void TraceUnderCrosshair(FHitResult& TraceHitResult);
 	void Fire();
 	void SetHUDCrosshair(float DeltaTime);
@@ -132,6 +133,7 @@ private:
 	int32 StartingARAmmo = 30;
 	
 	void InitializeCarriedAmmo();
+	void UpdateAmmoValues();
 
 	UFUNCTION()
 	void OnRep_CarriedAmmo();
