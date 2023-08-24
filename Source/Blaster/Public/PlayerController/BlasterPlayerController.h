@@ -29,12 +29,13 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual float GetServerTime(); // Synced with server world clock
 	void OnMatchStateSet(FName State);
+	void HandleMatchHasStarted();
+	void HandleCooldown();
 protected:
 	virtual void BeginPlay() override;
 	void CheckTimeSync(float DeltaSeconds);
 	void SetHUDTime();
 	void PollInit();
-	void HandleMatchHasStarted();
 
 	/*
 	 * Sync time between client and server
