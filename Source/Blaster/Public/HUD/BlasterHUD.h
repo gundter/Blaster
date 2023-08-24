@@ -6,6 +6,7 @@
 #include "GameFramework/HUD.h"
 #include "BlasterHUD.generated.h"
 
+class UAnnouncement;
 class UCharacterOverlay;
 
 USTRUCT(BlueprintType)
@@ -43,12 +44,19 @@ class BLASTER_API ABlasterHUD : public AHUD
 public:
 	virtual void DrawHUD() override;
 	void AddCharacterOverlay();
+	void AddAnnouncement();
 
 	UPROPERTY(EditAnywhere, Category = "Player Stats")
 	TSubclassOf<UUserWidget> CharacterOverlayClass;
 
 	UPROPERTY()
 	TObjectPtr<UCharacterOverlay> CharacterOverlay;
+
+	UPROPERTY(EditAnywhere, Category = "Announcements")
+	TSubclassOf<UUserWidget> AnnouncementClass;
+
+	UPROPERTY()
+	TObjectPtr<UAnnouncement> Announcement;
 protected:
 	virtual void BeginPlay() override;
 private:

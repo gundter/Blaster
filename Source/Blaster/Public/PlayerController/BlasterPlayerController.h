@@ -33,6 +33,7 @@ protected:
 	void CheckTimeSync(float DeltaSeconds);
 	void SetHUDTime();
 	void PollInit();
+	void HandleMatchHasStarted();
 
 	/*
 	 * Sync time between client and server

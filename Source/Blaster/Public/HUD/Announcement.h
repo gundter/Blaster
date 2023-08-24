@@ -1,0 +1,26 @@
+// Copyright Serico Games
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Blueprint/UserWidget.h"
+#include "Announcement.generated.h"
+
+class UTextBlock;
+/**
+ * 
+ */
+UCLASS()
+class BLASTER_API UAnnouncement : public UUserWidget
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> WarmupTime;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> AnnouncementText;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> InfoText;
+};
