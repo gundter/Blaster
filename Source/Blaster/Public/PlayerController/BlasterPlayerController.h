@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "BlasterPlayerController.generated.h"
 
+class ABlasterGameMode;
 class UCharacterOverlay;
 class ABlasterHUD;
 /**
@@ -58,10 +59,13 @@ protected:
 	void ServerCheckMatchState();
 
 	UFUNCTION(Client, Reliable)
-	void ClientJoinMidGame(FName StateOfMatch, float Warmup, float Match, float StartingTime);
+	void ClientJoinMidGame(FName StateOfMatch, float Warmup, float Match, float StartingTime, float Cooldown);
 private:
 	UPROPERTY()
 	TObjectPtr<ABlasterHUD> BlasterHUD;
+
+	UPROPERTY()
+	TObjectPtr<ABlasterGameMode> BlasterGameMode;
 
 	UPROPERTY(ReplicatedUsing = OnRep_MatchState)
 	FName MatchState;
@@ -74,6 +78,7 @@ private:
 
 	float MatchTime = 0.f;
 	float WarmupTime = 0.f;
+	float CooldownTime = 0.f;
 	float LevelStartingTime = 0.f;
 	uint32 CountdownInt = 0;
 	bool bInitializeCharacterOverlay = false;
@@ -89,4 +94,5 @@ private:
 	bool IsCarriedAmmoHUDValid() const;
 	bool IsCountdownTimeHUDValid() const;
 	bool IsWarmupHUDValid() const;
+	bool IsAnnouncementHUDValid() const;
 };
