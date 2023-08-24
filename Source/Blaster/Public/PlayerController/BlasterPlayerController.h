@@ -20,16 +20,23 @@ public:
 	void SetHUDDefeats(int32 Defeats);
 	void SetHUDWeaponAmmo(int32 Ammo);
 	void SetHUDCarriedAmmo(int32 Ammo);
+	void SetHUDMatchCountdownTime(float CountdownTime);
 	virtual void OnPossess(APawn* InPawn) override;
 protected:
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
+	void SetHUDTime();
 private:
 	UPROPERTY()
 	TObjectPtr<ABlasterHUD> BlasterHUD;
+
+	float MatchTime = 120.f;
+	uint32 CountdownInt = 0;
 
 	bool IsHUDValid() const;
 	bool IsScoreHUDValid() const;
 	bool IsDefeatsHUDValid() const;
 	bool IsWeaponAmmoHUDValid() const;
 	bool IsCarriedAmmoHUDValid() const;
+	bool IsCountdownTimeHUDValid() const;
 };
