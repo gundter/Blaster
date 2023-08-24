@@ -16,11 +16,45 @@ void ABlasterPlayerController::BeginPlay()
 	BlasterHUD = Cast<ABlasterHUD>(GetHUD());
 }
 
+void ABlasterPlayerController::CheckTimeSync(const float DeltaSeconds)
+{
+	TimeSyncRunningTime += DeltaSeconds;
+	if (IsLocalController() && TimeSyncRunningTime > TimeSyncFrequency)
+	{
+		ServerRequestServerTime(GetWorld()->GetTimeSeconds());
+		TimeSyncRunningTime = 0.f;
+	}
+}
+
 void ABlasterPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
 	SetHUDTime();
+
+	CheckTimeSync(DeltaSeconds);
+}
+
+void ABlasterPlayerController::ReceivedPlayer()
+{
+	Super::ReceivedPlayer();
+
+	if (IsLocalController())
+	{
+		ServerRequestServerTime(GetWorld()->GetTimeSeconds());
+	}
+}
+
+float ABlasterPlayerController::GetServerTime()
+{
+	if (HasAuthority())
+	{
+		return GetWorld()->GetTimeSeconds();
+	}
+	else
+	{
+		return GetWorld()->GetTimeSeconds() + ClientServerDelta;
+	}
 }
 
 void ABlasterPlayerController::OnPossess(APawn* InPawn)
@@ -103,13 +137,27 @@ void ABlasterPlayerController::SetHUDMatchCountdownTime(const float CountdownTim
 
 void ABlasterPlayerController::SetHUDTime()
 {
-	const uint32 SecondsLeft = FMath::CeilToInt(MatchTime - GetWorld()->GetTimeSeconds());
+	const uint32 SecondsLeft = FMath::CeilToInt(MatchTime - GetServerTime());
 	if (CountdownInt != SecondsLeft)
 	{
-		SetHUDMatchCountdownTime(MatchTime - GetWorld()->GetTimeSeconds());
+		SetHUDMatchCountdownTime(MatchTime - GetServerTime());
 	}
 
 	CountdownInt = SecondsLeft;
+}
+
+void ABlasterPlayerController::ClientReportServerTime_Implementation(const float TimeOfClientRequest,
+                                                                     const float TimeServerReceivedClientRequest)
+{
+	const float RoundTripTime = GetWorld()->GetTimeSeconds() - TimeOfClientRequest;
+	const float CurrentServerTime = TimeServerReceivedClientRequest + (0.5f * RoundTripTime);
+	ClientServerDelta = CurrentServerTime - GetWorld()->GetTimeSeconds();
+}
+
+void ABlasterPlayerController::ServerRequestServerTime_Implementation(const float TimeOfClientRequest)
+{
+	const float ServerTimeOfReceipt = GetWorld()->GetTimeSeconds();
+	ClientReportServerTime(TimeOfClientRequest, ServerTimeOfReceipt);
 }
 
 bool ABlasterPlayerController::IsHUDValid() const
