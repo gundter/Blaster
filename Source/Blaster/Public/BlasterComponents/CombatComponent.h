@@ -29,6 +29,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	void EquipWeapon(AWeapon* WeaponToEquip);
 	void Reload();
+	void FireButtonPressed(const bool bPressed);
 	
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();
@@ -42,7 +43,6 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	void SetAiming(bool bIsAiming);
-	void FireButtonPressed(const bool bPressed);
 
 	UFUNCTION(Server, Reliable)
 	void ServerSetAiming(const bool bIsAiming);
