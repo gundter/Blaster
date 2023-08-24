@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "BlasterPlayerController.generated.h"
 
+class UCharacterOverlay;
 class ABlasterHUD;
 /**
  * 
@@ -24,11 +25,14 @@ public:
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void ReceivedPlayer() override; // Sync with server clock as soon as possible
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual float GetServerTime(); // Synced with server world clock
+	void OnMatchStateSet(FName State);
 protected:
 	virtual void BeginPlay() override;
 	void CheckTimeSync(float DeltaSeconds);
 	void SetHUDTime();
+	void PollInit();
 
 	/*
 	 * Sync time between client and server
@@ -50,8 +54,22 @@ private:
 	UPROPERTY()
 	TObjectPtr<ABlasterHUD> BlasterHUD;
 
+	UPROPERTY(ReplicatedUsing = OnRep_MatchState)
+	FName MatchState;
+
+	UPROPERTY()
+	TObjectPtr<UCharacterOverlay> CharacterOverlay;
+
+	UFUNCTION()
+	void OnRep_MatchState();
+
 	float MatchTime = 120.f;
 	uint32 CountdownInt = 0;
+	bool bInitializeCharacterOverlay = false;
+	float HUDHealth;
+	float HUDMaxHealth;
+	float HUDScore;
+	int32 HUDDefeats;
 
 	bool IsHUDValid() const;
 	bool IsScoreHUDValid() const;
