@@ -27,11 +27,17 @@ public:
 	UCombatComponent();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
 	void EquipWeapon(AWeapon* WeaponToEquip);
 	void Reload();
+	
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();
+
+	UFUNCTION(BlueprintCallable)
+	void GrabMag();
+
+	UFUNCTION(BlueprintCallable)
+	void ReleaseMag();
 
 protected:
 	virtual void BeginPlay() override;
@@ -49,6 +55,12 @@ protected:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastFire(const FVector_NetQuantize& TraceHitTarget);
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void MulticastGrabMag();
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void MulticastReleaseMag();
 
 	UFUNCTION(Server, Reliable)
 	void ServerReload();
@@ -87,6 +99,12 @@ private:
 	float AimWalkSpeedCrouched = 120.f;
 
 	bool bFireButtonPressed;
+
+	UPROPERTY(ReplicatedUsing = OnRep_MagTransform, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = "true"))
+	FTransform MagTransform;
+
+	UFUNCTION()
+	void OnRep_MagTransform();
 
 	/*
 	 * HUD and Crosshair

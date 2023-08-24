@@ -28,6 +28,7 @@ void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(UCombatComponent, bAiming);
 	DOREPLIFETIME_CONDITION(UCombatComponent, CarriedAmmo, COND_OwnerOnly);
 	DOREPLIFETIME(UCombatComponent, CombatState);
+	DOREPLIFETIME_CONDITION(UCombatComponent, MagTransform, COND_OwnerOnly);
 }
 
 void UCombatComponent::BeginPlay()
@@ -122,6 +123,10 @@ void UCombatComponent::FireTimerFinished()
 	{
 		Fire();
 	}
+	if (EquippedWeapon->IsEmpty())
+	{
+		Reload();
+	}
 }
 
 void UCombatComponent::ServerFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
@@ -170,6 +175,11 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, EquippedWeapon->EquipSound, Character->GetActorLocation());
 	}
+
+	if (EquippedWeapon->IsEmpty())
+	{
+		Reload();
+	}
 	
 	Character->GetCharacterMovement()->bOrientRotationToMovement = false;
 	Character->bUseControllerRotationYaw = true;
@@ -194,12 +204,52 @@ void UCombatComponent::OnRep_EquippedWeapon() const
 	}
 }
 
+void UCombatComponent::GrabMag()
+{
+	MulticastGrabMag();
+}
+
+void UCombatComponent::ReleaseMag()
+{
+	MulticastReleaseMag();
+}
+
+void UCombatComponent::MulticastGrabMag_Implementation()
+{
+	if (Character == nullptr || EquippedWeapon == nullptr || Character->GetHandSceneComponent() == nullptr) return;
+	
+	const int32 MagBoneIndex = EquippedWeapon->GetWeaponMesh()->GetBoneIndex(EquippedWeapon->GetMagBoneName());
+  	MagTransform = EquippedWeapon->GetWeaponMesh()->GetBoneTransform(MagBoneIndex);
+
+	const FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
+	Character->GetHandSceneComponent()->AttachToComponent(Character->GetMesh(), AttachmentRules, "hand_l");
+	Character->GetHandSceneComponent()->SetWorldTransform(MagTransform);
+
+	EquippedWeapon->SetMovingMag(true);
+	
+}
+
+void UCombatComponent::MulticastReleaseMag_Implementation()
+{
+	if (Character == nullptr || EquippedWeapon == nullptr) return;
+
+	EquippedWeapon->SetMovingMag(false);
+}
+
 void UCombatComponent::Reload()
 {
 	if (CarriedAmmo > 0 && CombatState != ECombatState::ECS_Reloading)
 	{
 		ServerReload();
 	}
+}
+
+void UCombatComponent::ServerReload_Implementation()
+{
+	if (Character == nullptr || EquippedWeapon == nullptr) return;
+	
+	CombatState = ECombatState::ECS_Reloading;
+	HandleReload();
 }
 
 void UCombatComponent::FinishReloading()
@@ -232,14 +282,6 @@ void UCombatComponent::UpdateAmmoValues()
 		Controller->SetHUDCarriedAmmo(CarriedAmmo);
 	}
 	EquippedWeapon->AddAmmo(-ReloadAmount);
-}
-
-void UCombatComponent::ServerReload_Implementation()
-{
-	if (Character == nullptr || EquippedWeapon == nullptr) return;
-	
-	CombatState = ECombatState::ECS_Reloading;
-	HandleReload();
 }
 
 void UCombatComponent::HandleReload() const
@@ -387,6 +429,14 @@ void UCombatComponent::SetHUDCrosshair(const float DeltaTime)
 			HUD->SetHUDPackage(HUDPackage);
 		}
 	}
+}
+
+void UCombatComponent::OnRep_MagTransform()
+{
+	if (EquippedWeapon == nullptr) return;
+	
+	const int32 MagBoneIndex = EquippedWeapon->GetWeaponMesh()->GetBoneIndex(EquippedWeapon->GetMagBoneName());
+	MagTransform = EquippedWeapon->GetWeaponMesh()->GetBoneTransform(MagBoneIndex);
 }
 
 void UCombatComponent::InterpFOV(const float DeltaTime)

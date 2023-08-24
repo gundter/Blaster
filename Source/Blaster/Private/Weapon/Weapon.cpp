@@ -38,6 +38,7 @@ void AWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeP
 
 	DOREPLIFETIME(AWeapon, WeaponState);
 	DOREPLIFETIME(AWeapon, Ammo);
+	DOREPLIFETIME(AWeapon, bMovingMag);
 }
 
 void AWeapon::BeginPlay()
@@ -62,9 +63,10 @@ void AWeapon::Tick(float DeltaTime)
 
 void AWeapon::Fire(const FVector& HitTarget)
 {
-	if (FireAnimation)
+	if (UAnimInstance* AnimInstance = WeaponMesh->GetAnimInstance(); AnimInstance && FireMontage)
 	{
-		WeaponMesh->PlayAnimation(FireAnimation, false);
+		AnimInstance->Montage_Play(FireMontage);
+		AnimInstance->Montage_JumpToSection("Default");
 	}
 	if (CasingClass)
 	{

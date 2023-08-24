@@ -56,6 +56,8 @@ ABlasterCharacter::ABlasterCharacter()
 	Combat->SetIsReplicated(true);
 	AddOwnedComponent(Combat);
 
+	HandSceneComponent = CreateDefaultSubobject<USceneComponent>("HandSceneComponent");
+
 	NetUpdateFrequency = 66.f;
 	MinNetUpdateFrequency = 33.f;
 }
@@ -66,6 +68,7 @@ void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 	DOREPLIFETIME_CONDITION(ABlasterCharacter, OverlappingWeapon, COND_OwnerOnly);
 	DOREPLIFETIME(ABlasterCharacter, Health);
+	DOREPLIFETIME_CONDITION(ABlasterCharacter, HandSceneComponent, COND_OwnerOnly);
 }
 
 void ABlasterCharacter::BeginPlay()
@@ -263,7 +266,7 @@ void ABlasterCharacter::OnRep_ReplicatedMovement()
 	TimeSinceLastMovementReplication = 0.f;
 }
 
-void ABlasterCharacter::AimOffset(float DeltaTime)
+void ABlasterCharacter::AimOffset(const float DeltaTime)
 {
 	if (Combat && Combat->EquippedWeapon == nullptr) return;
 	const float GroundSpeed = CalculateSpeed();
@@ -341,7 +344,7 @@ void ABlasterCharacter::SimProxiesTurn()
 	TurningInPlace = ETurningInPlace::ETIP_NotTurning;
 }
 
-void ABlasterCharacter::TurnInPlace(float DeltaTime)
+void ABlasterCharacter::TurnInPlace(const float DeltaTime)
 {
 	if (AO_Yaw > 90.f)
 	{
@@ -495,6 +498,16 @@ void ABlasterCharacter::ElimPlayer()
 		&ABlasterCharacter::ElimTimerFinished,
 		ElimDelay
 	);
+}
+
+void ABlasterCharacter::OnRep_HandSceneComponent() const
+{
+	if (Combat)
+	{
+		const FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
+		HandSceneComponent->AttachToComponent(GetMesh(), AttachmentRules, "hand_l");
+		HandSceneComponent->SetWorldTransform(Combat->MagTransform);
+	}
 }
 
 void ABlasterCharacter::MulticastElim_Implementation()

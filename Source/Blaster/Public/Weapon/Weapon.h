@@ -119,6 +119,15 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	EWeaponType WeaponType;
 
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "Weapon Properties", meta = (AllowPrivateAccess = "true"))
+	bool bMovingMag;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+	FName MagBoneName = "Clip_Bone";
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+	TObjectPtr<UAnimMontage> FireMontage;
+
 	UFUNCTION()
 	void OnRep_WeaponState() const;
 
@@ -129,6 +138,8 @@ private:
 
 public:
 	void SetWeaponState(const EWeaponState State);
+	void SetMovingMag(const bool bMove) { bMovingMag = bMove; }
+	
 	FORCEINLINE USphereComponent* GetSphere() const { return Sphere; }
 	FORCEINLINE USkeletalMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
 	FORCEINLINE float GetZoomedFOV() const { return ZoomedFOV; }
@@ -136,5 +147,7 @@ public:
 	FORCEINLINE EWeaponType GetWeaponType() const { return WeaponType; }
 	FORCEINLINE int32 GetAmmo() const { return Ammo; }
 	FORCEINLINE int32 GetMagCapacity() const { return MagCapacity; }
+	FORCEINLINE FName GetMagBoneName() const { return MagBoneName; }
+	FORCEINLINE bool IsMovingMag() const { return bMovingMag; }
 	bool IsEmpty() const;
 };

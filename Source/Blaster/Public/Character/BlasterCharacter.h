@@ -36,8 +36,11 @@ public:
 	void PlayFireMontage(bool bAiming) const;
 	void PlayReloadMontage() const;
 	void PlayElimMontage();
-
 	void ElimPlayer();
+
+	UFUNCTION()
+	void OnRep_HandSceneComponent() const;
+	
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastElim();
 protected:
@@ -126,6 +129,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<UAnimMontage> ElimMontage;
 
+	UPROPERTY(ReplicatedUsing = OnRep_HandSceneComponent, BlueprintReadOnly,  Category = "Combat", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USceneComponent> HandSceneComponent;
+
 	UPROPERTY(EditAnywhere)
 	float CameraThreshold = 200.f;
 
@@ -183,6 +189,7 @@ public:
 	FORCEINLINE bool IsElimmed() const { return bElimmed; }
 	FORCEINLINE float GetHealth() const { return Health; }
 	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
+	FORCEINLINE USceneComponent* GetHandSceneComponent() const { return HandSceneComponent; }
 	bool IsWeaponEquipped() const;
 	bool IsAiming() const;
 	AWeapon* GetEquippedWeapon() const;
