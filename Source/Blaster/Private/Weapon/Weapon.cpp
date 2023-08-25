@@ -44,6 +44,7 @@ void AWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeP
 void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
+	SetReplicateMovement(true);
 
 	if (HasAuthority())
 	{

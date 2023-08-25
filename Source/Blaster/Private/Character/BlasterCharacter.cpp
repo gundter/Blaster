@@ -501,6 +501,9 @@ void ABlasterCharacter::PlayReloadMontage() const
 	case EWeaponType::EWT_AssaultRifle:
 		ReloadWeaponMontage = ReloadRifleMontage;
 		break;
+	case EWeaponType::EWT_RocketLauncher:
+		ReloadWeaponMontage = ReloadRifleMontage;
+		break;
 	default:
 		ReloadWeaponMontage = nullptr;
 	}
