@@ -25,4 +25,13 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	TObjectPtr<UParticleSystem> BeamParticles;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+	TObjectPtr<UParticleSystem> MuzzleFlash;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+	TObjectPtr<USoundBase> FireSound;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+	TObjectPtr<USoundBase> HitSound;
 };

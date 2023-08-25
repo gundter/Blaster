@@ -85,6 +85,12 @@ protected:
 	virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bSweep, const FHitResult& SweepResult);
 	UFUNCTION()
 	virtual void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	UPROPERTY(BlueprintReadOnly, Category = "References", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<ABlasterCharacter> BlasterOwnerCharacter;
+
+	UPROPERTY(BlueprintReadOnly, Category = "References", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<ABlasterPlayerController> BlasterOwnerController;
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
@@ -109,12 +115,6 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	int32 MagCapacity;
-
-	UPROPERTY()
-	TObjectPtr<ABlasterCharacter> BlasterOwnerCharacter;
-
-	UPROPERTY()
-	TObjectPtr<ABlasterPlayerController> BlasterOwnerController;
 
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	EWeaponType WeaponType;

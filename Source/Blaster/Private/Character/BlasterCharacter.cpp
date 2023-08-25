@@ -507,6 +507,9 @@ void ABlasterCharacter::PlayReloadMontage() const
 	case EWeaponType::EWT_Pistol:
 		SectionName = "ReloadPistol";
 		break;
+	case EWeaponType::EWT_SMG:
+		SectionName = "ReloadPistol";
+		break;
 	default:
 		break;
 	}
