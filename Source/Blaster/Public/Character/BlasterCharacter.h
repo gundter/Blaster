@@ -126,7 +126,7 @@ private:
 	TObjectPtr<UAnimMontage> AimFireWeaponMontage;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
-	TObjectPtr<UAnimMontage> ReloadRifleMontage;
+	TObjectPtr<UAnimMontage> ReloadMontage;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<UAnimMontage> HitReactMontage;

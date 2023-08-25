@@ -61,10 +61,10 @@ public:
 	/*
 	 * Zoomed FOV while aiming
 	 */
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	float ZoomedFOV	= 30.f;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	float ZoomInterpSpeed = 20.f;
 
 	/*
@@ -101,7 +101,7 @@ private:
 	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_WeaponState, Category = "Weapon Properties")
 	EWeaponState WeaponState;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	TSubclassOf<ACasing> CasingClass;
 
 	UPROPERTY(EditAnywhere, ReplicatedUsing = OnRep_Ammo, Category = "Weapon Properties")

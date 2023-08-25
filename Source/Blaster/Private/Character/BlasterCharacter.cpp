@@ -495,23 +495,25 @@ void ABlasterCharacter::PlayReloadMontage() const
 {
 	if (Combat == nullptr || Combat->EquippedWeapon == nullptr) return;
 
-	UAnimMontage* ReloadWeaponMontage;
+	FName SectionName;
 	switch (Combat->EquippedWeapon->GetWeaponType())
 	{
 	case EWeaponType::EWT_AssaultRifle:
-		ReloadWeaponMontage = ReloadRifleMontage;
+		SectionName = Combat->EquippedWeapon->IsEmpty() ? "ReloadEmpty" : "ReloadLoaded";
 		break;
 	case EWeaponType::EWT_RocketLauncher:
-		ReloadWeaponMontage = ReloadRifleMontage;
+		SectionName = "ReloadLoaded";
+		break;
+	case EWeaponType::EWT_Pistol:
+		SectionName = "ReloadPistol";
 		break;
 	default:
-		ReloadWeaponMontage = nullptr;
+		break;
 	}
 
-	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance(); AnimInstance && ReloadWeaponMontage)
+	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance(); AnimInstance && ReloadMontage)
 	{
-		AnimInstance->Montage_Play(ReloadWeaponMontage);
-		const FName SectionName = Combat->EquippedWeapon->IsEmpty() ? "ReloadEmpty" : "ReloadLoaded";
+		AnimInstance->Montage_Play(ReloadMontage);
 		AnimInstance->Montage_JumpToSection(SectionName);
 	}
 }
