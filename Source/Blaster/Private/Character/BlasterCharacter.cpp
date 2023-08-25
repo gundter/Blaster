@@ -510,6 +510,9 @@ void ABlasterCharacter::PlayReloadMontage() const
 	case EWeaponType::EWT_SMG:
 		SectionName = "ReloadPistol";
 		break;
+	case EWeaponType::EWT_Shotgun:
+		SectionName = Combat->EquippedWeapon->IsEmpty() ? "ReloadEmpty" : "ReloadLoaded";
+		break;
 	default:
 		break;
 	}
