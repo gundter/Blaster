@@ -39,14 +39,17 @@ public:
 	void PlayElimMontage();
 	void ElimPlayer();
 
+	UPROPERTY(Replicated)
+	bool bDisableGameplay = false;
+
 	UFUNCTION()
 	void OnRep_HandSceneComponent() const;
 	
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastElim();
 
-	UPROPERTY(Replicated)
-	bool bDisableGameplay = false;
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowSniperScopeWidget(bool bShowScope);
 protected:
 	virtual void BeginPlay() override;
 	virtual void Jump() override;

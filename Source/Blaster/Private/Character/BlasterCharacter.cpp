@@ -514,7 +514,7 @@ void ABlasterCharacter::PlayReloadMontage() const
 		SectionName = Combat->EquippedWeapon->IsEmpty() ? "ReloadEmpty" : "ReloadLoaded";
 		break;
 	case EWeaponType::EWT_SniperRifle:
-		SectionName = Combat->EquippedWeapon->IsEmpty() ? "ReloadEmpty" : "ReloadLoaded";
+		SectionName = "ReloadLoaded";
 		break;
 	default:
 		break;
@@ -585,6 +585,15 @@ void ABlasterCharacter::MulticastElim_Implementation()
 	// Disable Collision
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	if (IsLocallyControlled() &&
+		Combat &&
+		Combat->bAiming &&
+		Combat->EquippedWeapon &&
+		Combat->EquippedWeapon->GetWeaponType() == EWeaponType::EWT_SniperRifle)
+	{
+		ShowSniperScopeWidget(false);
+	}
 }
 
 void ABlasterCharacter::ElimTimerFinished()

@@ -62,7 +62,7 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void ServerReload();
 
-	void HandleReload() const;
+	void HandleReload();
 	int32 AmountToReload();
 	void TraceUnderCrosshair(FHitResult& TraceHitResult);
 	void Fire();

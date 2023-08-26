@@ -289,8 +289,18 @@ void UCombatComponent::UpdateAmmoValues()
 	EquippedWeapon->AddAmmo(-ReloadAmount);
 }
 
-void UCombatComponent::HandleReload() const
+void UCombatComponent::HandleReload()
 {
+	if (Character &&
+		Character->IsLocallyControlled() &&
+		bAiming &&
+		EquippedWeapon &&
+		CombatState == ECombatState::ECS_Reloading &&
+		EquippedWeapon->GetWeaponType() == EWeaponType::EWT_SniperRifle)
+	{
+		bAiming = false;
+		Character->ShowSniperScopeWidget(false);
+	}
 	Character->PlayReloadMontage();
 }
 
@@ -448,7 +458,7 @@ void UCombatComponent::InterpFOV(const float DeltaTime)
 {
 	if (EquippedWeapon == nullptr) return;
 
-	if (bAiming)
+	if (bAiming && CombatState == ECombatState::ECS_Unoccupied)
 	{
 		CurrentFOV = FMath::FInterpTo(CurrentFOV, EquippedWeapon->GetZoomedFOV(), DeltaTime, EquippedWeapon->ZoomInterpSpeed);
 	}
@@ -464,12 +474,17 @@ void UCombatComponent::InterpFOV(const float DeltaTime)
 
 void UCombatComponent::SetAiming(const bool bIsAiming)
 {
+	if (Character == nullptr || EquippedWeapon == nullptr) return;
 	bAiming = bIsAiming;
 	ServerSetAiming(bIsAiming);
 	if (Character)
 	{
 		Character->GetCharacterMovement()->MaxWalkSpeed = bIsAiming ? AimWalkSpeed : BaseWalkSpeed;
 		Character->GetCharacterMovement()->MaxWalkSpeedCrouched = bIsAiming ? AimWalkSpeedCrouched : BaseWalkSpeedCrouched;
+	}
+	if (Character->IsLocallyControlled() && EquippedWeapon->GetWeaponType() == EWeaponType::EWT_SniperRifle)
+	{
+		Character->ShowSniperScopeWidget(bIsAiming);
 	}
 }
 
