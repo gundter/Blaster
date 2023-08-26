@@ -516,6 +516,9 @@ void ABlasterCharacter::PlayReloadMontage() const
 	case EWeaponType::EWT_SniperRifle:
 		SectionName = "ReloadLoaded";
 		break;
+	case EWeaponType::EWT_GrenadeLauncher:
+		SectionName = "ReloadLoaded";
+		break;
 	default:
 		break;
 	}
