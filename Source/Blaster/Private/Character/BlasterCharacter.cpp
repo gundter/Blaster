@@ -513,6 +513,9 @@ void ABlasterCharacter::PlayReloadMontage() const
 	case EWeaponType::EWT_Shotgun:
 		SectionName = Combat->EquippedWeapon->IsEmpty() ? "ReloadEmpty" : "ReloadLoaded";
 		break;
+	case EWeaponType::EWT_SniperRifle:
+		SectionName = Combat->EquippedWeapon->IsEmpty() ? "ReloadEmpty" : "ReloadLoaded";
+		break;
 	default:
 		break;
 	}
