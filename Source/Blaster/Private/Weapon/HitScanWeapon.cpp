@@ -69,12 +69,12 @@ void AHitScanWeapon::WeaponTraceHit(const FVector& TraceStart, const FVector& Hi
 		if (OutHit.bBlockingHit)
 		{
 			BeamEnd = OutHit.ImpactPoint;
-			if (BeamParticles)
+		}
+		if (BeamParticles)
+		{
+			if (UParticleSystemComponent* Beam = UGameplayStatics::SpawnEmitterAtLocation(World, BeamParticles, TraceStart, FRotator::ZeroRotator, true))
 			{
-				if (UParticleSystemComponent* Beam = UGameplayStatics::SpawnEmitterAtLocation(World, BeamParticles, TraceStart, FRotator::ZeroRotator, true))
-				{
-					Beam->SetVectorParameter("Target", BeamEnd);
-				}
+				Beam->SetVectorParameter("Target", BeamEnd);
 			}
 		}
 	}

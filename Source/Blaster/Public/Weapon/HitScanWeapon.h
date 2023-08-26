@@ -27,16 +27,18 @@ protected:
 	TObjectPtr<USoundBase> HitSound;
 
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+	TObjectPtr<UParticleSystem> MuzzleFlash;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+	TObjectPtr<USoundBase> FireSound;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	float Damage = 20.f;
 private:
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	TObjectPtr<UParticleSystem> BeamParticles;
 
-	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
-	TObjectPtr<UParticleSystem> MuzzleFlash;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
-	TObjectPtr<USoundBase> FireSound;
+	
 
 	/*
 	 * Trace end with scatter
