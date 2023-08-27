@@ -670,7 +670,7 @@ void ABlasterCharacter::PollInit()
 void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
                                       AController* InstigatorController, AActor* DamageCauser)
 {
-	if (bElimmed == true) return;
+	if (bElimmed) return;
 	
 	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
 	UpdateHUDHealth();

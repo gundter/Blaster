@@ -194,6 +194,17 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	int32 StartingGrenadeLauncherAmmo = 0;
+
+	UPROPERTY(ReplicatedUsing = OnRep_Grenades)
+	int32 Grenades = 4;
+
+	UFUNCTION()
+	void OnRep_Grenades();
+
+	void UpdateHUDGrenades();
+
+	UPROPERTY(EditAnywhere)
+	int32 MaxGrenades = 4;
 	
 	void InitializeCarriedAmmo();
 	void UpdateAmmoValues();
@@ -207,4 +218,6 @@ private:
 
 	UFUNCTION()
 	void OnRep_CombatState();
+public:
+	FORCEINLINE int32 GetGrenades() const { return Grenades; }
 };

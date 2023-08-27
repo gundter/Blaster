@@ -191,6 +191,20 @@ void ABlasterPlayerController::SetHUDAnnouncementCountdown(float CountdownTime)
 	}
 }
 
+void ABlasterPlayerController::SetHUDGrenades(const int32 Grenades)
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+
+	if (IsGrenadeHUDValid())
+	{
+		BlasterHUD->CharacterOverlay->GrenadesText->SetText(FText::AsNumber(Grenades));
+	}
+	else
+	{
+		HUDGrenades = Grenades;
+	}
+}
+
 void ABlasterPlayerController::SetHUDTime()
 {
 	float TimeLeft = 0.f;
@@ -226,6 +240,11 @@ void ABlasterPlayerController::PollInit()
 				SetHUDHealth(HUDHealth, HUDMaxHealth);
 				SetHUDScore(HUDScore);
 				SetHUDDefeats(HUDDefeats);
+
+				if (const ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn()); BlasterCharacter && BlasterCharacter->GetCombatComponent())
+				{
+					SetHUDGrenades(BlasterCharacter->GetCombatComponent()->GetGrenades());
+				}
 			}
 		}
 	}
@@ -411,13 +430,20 @@ bool ABlasterPlayerController::IsCountdownTimeHUDValid() const
 bool ABlasterPlayerController::IsWarmupHUDValid() const
 {
 	return BlasterHUD &&
-		BlasterHUD->Announcement &&
-		BlasterHUD->Announcement->WarmupTime;
+			BlasterHUD->Announcement &&
+				BlasterHUD->Announcement->WarmupTime;
 }
 
 bool ABlasterPlayerController::IsAnnouncementHUDValid() const
 {
-	return BlasterHUD->Announcement &&
-		BlasterHUD->Announcement->AnnouncementText &&
-		BlasterHUD->Announcement->InfoText;
+	return BlasterHUD && BlasterHUD->Announcement &&
+			BlasterHUD->Announcement->AnnouncementText &&
+				BlasterHUD->Announcement->InfoText;
+}
+
+bool ABlasterPlayerController::IsGrenadeHUDValid() const
+{
+	return BlasterHUD &&
+			BlasterHUD->CharacterOverlay &&
+				BlasterHUD->CharacterOverlay->GrenadesText;
 }

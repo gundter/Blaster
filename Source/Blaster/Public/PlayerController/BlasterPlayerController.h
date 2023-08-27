@@ -24,6 +24,7 @@ public:
 	void SetHUDCarriedAmmo(int32 Ammo);
 	void SetHUDMatchCountdownTime(float CountdownTime);
 	void SetHUDAnnouncementCountdown(float CountdownTime);
+	void SetHUDGrenades(int32 Grenades);
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void ReceivedPlayer() override; // Sync with server clock as soon as possible
@@ -86,6 +87,7 @@ private:
 	float HUDMaxHealth;
 	float HUDScore;
 	int32 HUDDefeats;
+	int32 HUDGrenades;
 
 	bool IsHUDValid() const;
 	bool IsScoreHUDValid() const;
@@ -95,4 +97,5 @@ private:
 	bool IsCountdownTimeHUDValid() const;
 	bool IsWarmupHUDValid() const;
 	bool IsAnnouncementHUDValid() const;
+	bool IsGrenadeHUDValid() const;
 };
