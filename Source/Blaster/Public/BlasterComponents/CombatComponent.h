@@ -8,6 +8,7 @@
 #include "HUD/BlasterHUD.h"
 #include "CombatComponent.generated.h"
 
+class AProjectile;
 enum class EWeaponType : uint8;
 class ABlasterHUD;
 class ABlasterPlayerController;
@@ -74,6 +75,9 @@ protected:
 
 	UFUNCTION(Server, Reliable)
 	void ServerThrowGrenade();
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AProjectile> GrenadeClass;
 
 	void HandleReload();
 	int32 AmountToReload();
