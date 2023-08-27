@@ -78,6 +78,12 @@ protected:
 	void Fire();
 	void SetHUDCrosshair(float DeltaTime);
 	void ThrowGrenade();
+	void DropEquippedWeapon() const;
+	void AttachActorToRightHand(AActor* ActorToAttach) const;
+	void AttachActorToLeftHand(AActor* ActorToAttach) const;
+	void UpdateCarriedAmmo();
+	void PlayEquipWeaponSound() const;
+	void ReloadEmptyWeapon();
 private:
 	UPROPERTY()
 	TObjectPtr<ABlasterCharacter> Character;
