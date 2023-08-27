@@ -200,6 +200,7 @@ public:
 	FORCEINLINE USceneComponent* GetHandSceneComponent() const { return HandSceneComponent; }
 	FORCEINLINE UCombatComponent* GetCombatComponent() const { return Combat; }
 	FORCEINLINE bool GetDisableGameplay() const { return bDisableGameplay; }
+	FORCEINLINE UAnimMontage* GetReloadMontage() const { return ReloadMontage; }
 	bool IsWeaponEquipped() const;
 	bool IsAiming() const;
 	AWeapon* GetEquippedWeapon() const;

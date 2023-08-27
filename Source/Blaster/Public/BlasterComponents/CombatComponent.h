@@ -27,6 +27,7 @@ public:
 	void EquipWeapon(AWeapon* WeaponToEquip);
 	void Reload();
 	void FireButtonPressed(const bool bPressed);
+	void JumpToShotgunEnd() const;
 	
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();
@@ -36,6 +37,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ReleaseMag();
+
+	UFUNCTION(BlueprintCallable)
+	void ShotgunShellReload();
 
 protected:
 	virtual void BeginPlay() override;
@@ -167,6 +171,7 @@ private:
 	
 	void InitializeCarriedAmmo();
 	void UpdateAmmoValues();
+	void UpdateShotgunAmmoValues();
 
 	UFUNCTION()
 	void OnRep_CarriedAmmo();

@@ -150,4 +150,5 @@ public:
 	FORCEINLINE FName GetMagBoneName() const { return MagBoneName; }
 	FORCEINLINE bool IsMovingMag() const { return bMovingMag; }
 	bool IsEmpty() const;
+	bool IsFull() const;
 };
