@@ -78,6 +78,11 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<USoundBase> EquipSound;
+
+	/*
+	 * Enable or disable custom depth
+	 */
+	void EnableCustomDepth(bool bEnabled) const;
 protected:
 	virtual void BeginPlay() override;
 
