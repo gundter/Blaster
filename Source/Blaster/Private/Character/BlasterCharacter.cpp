@@ -508,13 +508,13 @@ void ABlasterCharacter::PlayReloadMontage() const
 		SectionName = "ReloadPistol";
 		break;
 	case EWeaponType::EWT_SMG:
-		SectionName = "ReloadPistol";
+		SectionName = "ReloadSMG";
 		break;
 	case EWeaponType::EWT_Shotgun:
-		SectionName = Combat->EquippedWeapon->IsEmpty() ? "ReloadEmpty" : "ReloadLoaded";
+		SectionName = "ReloadShotgun";
 		break;
 	case EWeaponType::EWT_SniperRifle:
-		SectionName = "ReloadLoaded";
+		SectionName = "ReloadSniper";
 		break;
 	case EWeaponType::EWT_GrenadeLauncher:
 		SectionName = "ReloadLoaded";
