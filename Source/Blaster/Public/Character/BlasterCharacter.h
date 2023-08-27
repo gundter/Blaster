@@ -195,6 +195,12 @@ private:
 	float ElimDelay = 3.f;
 	FTimerHandle ElimTimer;
 	void ElimTimerFinished();
+
+	/*
+	 * Grenade
+	 */
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UStaticMeshComponent> AttachedGrenade;
 	
 public:
 	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }

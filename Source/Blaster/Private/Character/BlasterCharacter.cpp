@@ -61,6 +61,10 @@ ABlasterCharacter::ABlasterCharacter()
 
 	NetUpdateFrequency = 66.f;
 	MinNetUpdateFrequency = 33.f;
+
+	AttachedGrenade = CreateDefaultSubobject<UStaticMeshComponent>("Attached Grenade");
+	AttachedGrenade->SetupAttachment(GetMesh(), "GrenadeSocket");
+	AttachedGrenade->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
