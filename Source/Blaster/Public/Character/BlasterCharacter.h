@@ -37,6 +37,7 @@ public:
 	void PlayFireMontage(bool bAiming) const;
 	void PlayReloadMontage() const;
 	void PlayElimMontage();
+	void PlayThrowGrenadeMontage() const;
 	void ElimPlayer();
 
 	UPROPERTY(Replicated)
@@ -76,6 +77,7 @@ protected:
 	void FireButtonPressed();
 	void FireButtonReleased();
 	void Reload();
+	void GrenadeButtonPressed();
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	TObjectPtr<USpringArmComponent> CameraBoom;
@@ -110,6 +112,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> ReloadAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> ThrowGrenadeAction;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UWidgetComponent> OverheadWidget;
 
@@ -136,6 +141,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<UAnimMontage> ElimMontage;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TObjectPtr<UAnimMontage> ThrowGrenadeMontage;
 
 	UPROPERTY(ReplicatedUsing = OnRep_HandSceneComponent, BlueprintReadOnly,  Category = "Combat", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USceneComponent> HandSceneComponent;

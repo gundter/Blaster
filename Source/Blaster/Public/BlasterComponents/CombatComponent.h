@@ -41,6 +41,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ShotgunShellReload();
 
+	UFUNCTION(BlueprintCallable)
+	void ThrowGrenadeFinished();
+
 protected:
 	virtual void BeginPlay() override;
 	void SetAiming(bool bIsAiming);
@@ -66,11 +69,15 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void ServerReload();
 
+	UFUNCTION(Server, Reliable)
+	void ServerThrowGrenade();
+
 	void HandleReload();
 	int32 AmountToReload();
 	void TraceUnderCrosshair(FHitResult& TraceHitResult);
 	void Fire();
 	void SetHUDCrosshair(float DeltaTime);
+	void ThrowGrenade();
 private:
 	UPROPERTY()
 	TObjectPtr<ABlasterCharacter> Character;
