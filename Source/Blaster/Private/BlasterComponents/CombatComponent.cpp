@@ -60,6 +60,8 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	{
 		FHitResult HitResult;
 		TraceUnderCrosshair(HitResult);
+		HitTarget = HitResult.ImpactPoint;
+		
 		SetHUDCrosshair(DeltaTime);
 		InterpFOV(DeltaTime);
 	}
@@ -79,9 +81,7 @@ void UCombatComponent::Fire()
 	if (CanFire())
 	{
 		bCanFire = false;
-		FHitResult HitResult;
-		TraceUnderCrosshair(HitResult);
-		ServerFire(HitResult.ImpactPoint);
+		ServerFire(HitTarget);
 		if (EquippedWeapon)
 		{
 			CrosshairShootingFactor = 0.75f;
@@ -591,12 +591,18 @@ void UCombatComponent::ThrowGrenadeFinished()
 void UCombatComponent::LaunchGrenade()
 {
 	ShowAttachedGrenade(false);
-	if (Character && Character->HasAuthority() && GrenadeClass && Character->GetAttachedGrenade())
+	if (Character && Character->IsLocallyControlled())
+	{
+		ServerLaunchGrenade(HitTarget);
+	}
+}
+
+void UCombatComponent::ServerLaunchGrenade_Implementation(const FVector_NetQuantize& Target)
+{
+	if (Character && GrenadeClass && Character->GetAttachedGrenade())
 	{
 		const FVector StartingLocation = Character->GetAttachedGrenade()->GetComponentLocation();
-		FHitResult HitResult;
-		TraceUnderCrosshair(HitResult);
-		FVector ToTarget = HitResult.ImpactPoint - StartingLocation;
+		const FVector ToTarget = Target - StartingLocation;
 		FActorSpawnParameters SpawnParameters;
 		SpawnParameters.Owner = Character;
 		SpawnParameters.Instigator = Character;
