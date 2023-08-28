@@ -8,6 +8,7 @@
 
 class ABlasterGameMode;
 class UCharacterOverlay;
+class UAnnouncement;
 class ABlasterHUD;
 /**
  * 
@@ -74,6 +75,9 @@ private:
 	UPROPERTY()
 	TObjectPtr<UCharacterOverlay> CharacterOverlay;
 
+	UPROPERTY()
+	TObjectPtr<UAnnouncement> Announcement;
+
 	UFUNCTION()
 	void OnRep_MatchState();
 
@@ -86,6 +90,8 @@ private:
 	float HUDHealth;
 	float HUDMaxHealth;
 	float HUDScore;
+	float HUDWarmupTime;
+	float HUDCountdownTime;
 	int32 HUDDefeats;
 	int32 HUDGrenades;
 

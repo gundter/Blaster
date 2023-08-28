@@ -170,6 +170,10 @@ void ABlasterPlayerController::SetHUDMatchCountdownTime(const float CountdownTim
 		const FString CountdownText = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
 		BlasterHUD->CharacterOverlay->MatchCountdownText->SetText(FText::FromString(CountdownText));
 	}
+	else
+	{
+		HUDCountdownTime = CountdownTime;
+	}
 }
 
 void ABlasterPlayerController::SetHUDAnnouncementCountdown(float CountdownTime)
@@ -188,6 +192,10 @@ void ABlasterPlayerController::SetHUDAnnouncementCountdown(float CountdownTime)
 		const int32 Seconds = CountdownTime - Minutes * 60;
 		const FString CountdownText = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
 		BlasterHUD->Announcement->WarmupTime->SetText(FText::FromString(CountdownText));
+	}
+	else
+	{
+		HUDWarmupTime = CountdownTime;
 	}
 }
 
@@ -245,6 +253,18 @@ void ABlasterPlayerController::PollInit()
 				{
 					SetHUDGrenades(BlasterCharacter->GetCombatComponent()->GetGrenades());
 				}
+			}
+		}
+	}
+	if (Announcement == nullptr)
+	{
+		if (BlasterHUD && BlasterHUD->Announcement)
+		{
+			Announcement = BlasterHUD->Announcement;
+			if (Announcement)
+			{
+				SetHUDAnnouncementCountdown(HUDWarmupTime);
+				SetHUDMatchCountdownTime(HUDCountdownTime);
 			}
 		}
 	}
