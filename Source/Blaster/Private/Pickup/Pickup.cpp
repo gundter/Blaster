@@ -5,6 +5,7 @@
 
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Weapon/WeaponTypes.h"
 
 APickup::APickup()
 {
@@ -19,10 +20,14 @@ APickup::APickup()
 	OverlapSphere->SetCollisionResponseToAllChannels(ECR_Ignore);
 	OverlapSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	OverlapSphere->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	OverlapSphere->AddLocalOffset(FVector(0.f, 0.f, 85.f));
 
 	PickupMesh = CreateDefaultSubobject<UStaticMeshComponent>("Pickup Mesh");
 	PickupMesh->SetupAttachment(OverlapSphere);
 	PickupMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	PickupMesh->SetRelativeScale3D(FVector(5.f));
+	PickupMesh->SetRenderCustomDepth(true);
+	PickupMesh->SetCustomDepthStencilValue(CUSTOM_DEPTH_PURPLE);
 }
 
 void APickup::BeginPlay()
@@ -39,6 +44,10 @@ void APickup::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (PickupMesh)
+	{
+		PickupMesh->AddLocalRotation(FRotator(0.f, BaseTurnRate * DeltaTime, 0.f));
+	}
 }
 
 void APickup::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
