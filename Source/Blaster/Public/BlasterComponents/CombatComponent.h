@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blaster/BlasterTypes/CombatState.h"
+#include "BlasterTypes/CombatState.h"
 #include "Components/ActorComponent.h"
 #include "HUD/BlasterHUD.h"
 #include "CombatComponent.generated.h"

@@ -132,8 +132,6 @@ void ABlasterPlayerController::SetHUDDefeats(const int32 Defeats)
 	}
 }
 
-
-
 void ABlasterPlayerController::SetHUDWeaponAmmo(const int32 Ammo)
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;

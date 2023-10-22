@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Pickup/Pickup.h"
+#include "Weapon/WeaponTypes.h"
 #include "AmmoPickup.generated.h"
 
 enum class EWeaponType : uint8;
@@ -23,5 +24,5 @@ private:
 	int32 AmmoAmount = 30;
 
 	UPROPERTY(EditAnywhere)
-	EWeaponType WeaponType;
+	EWeaponType WeaponType = EWeaponType::EWT_MAX;
 };
